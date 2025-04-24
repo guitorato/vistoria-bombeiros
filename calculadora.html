@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Calculadora de Vistoria - Bombeiros</title>
@@ -13,77 +14,107 @@
       flex-direction: column;
       align-items: center;
     }
+
     h1 {
       color: white;
       text-align: center;
       padding: 20px 0;
     }
+
     .main-box {
       background: #fff;
       padding: 20px;
       border-radius: 10px;
       width: 90%;
       max-width: 1200px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       margin-bottom: 40px;
     }
+
     .top-form {
       margin-bottom: 20px;
       display: flex;
       gap: 20px;
       align-items: flex-end;
     }
+
     .form-group {
       flex: 1;
     }
-    input[type="text"], input[type="number"] {
+
+    input[type="text"],
+    input[type="number"] {
       width: 150px;
       padding: 6px;
       margin-top: 4px;
     }
+
     .divider-horizontal {
       border-top: 1px solid #ccc;
       margin: 20px 0;
     }
+
     .content {
       display: flex;
       justify-content: space-between;
     }
-    .content > div {
+
+    .content>div {
       flex: 1;
     }
-    .multa { 
-      margin-bottom: 10px; 
+
+    .multa {
+      margin-bottom: 10px;
     }
+
     .extrato-box {
       padding: 10px 0;
     }
-    .total { font-weight: bold; margin-top: 10px; }
-    
+
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
     /* Estilos dos blocos com bordas */
     .form {
       border: 1px solid #ccc;
       padding: 15px;
       border-radius: 5px;
     }
+
     .extrato {
       border: 1px solid #ccc;
       padding: 30px;
       border-radius: 5px;
     }
+
+    .rodape {
+      color: white;
+      font-size: 12px;
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      background-color: transparent;
+    }
   </style>
 </head>
+
 <body>
   <h1>Calculadora de Vistoria - Bombeiros</h1>
 
   <div class="main-box">
     <div class="top-form">
       <div class="form-group">
-        <label><h3>Nome da Instituição:</h3></label>
+        <label>
+          <h3>Nome da Instituição:</h3>
+        </label>
         <input type="text" id="instituicao" placeholder="Ex: Hospital" oninput="atualizarExtrato()" />
       </div>
       <div class="form-group">
-        <label><h3>Inicial da Vistoria (R$):</h3></label>
+        <label>
+          <h3>Inicial da Vistoria (R$):</h3>
+        </label>
         <input type="text" id="valorInicial" value="0" oninput="formatarValorInput(this)" style="width: 150px;" />
       </div>
     </div>
@@ -93,11 +124,16 @@
     <div class="content">
       <div class="form">
         <h2>Multas</h2>
-        <div class="multa"><button onclick="adicionarMulta('Extintores vencidos', 500000)">+ Extintores vencidos (R$ 500.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Saída de emergência bloqueada', 1000000)">+ Saída bloqueada (R$ 1.000.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Falta de sinalização', 750000)">+ Falta de sinalização (R$ 750.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Sistema de alarme inoperante', 1250000)">+ Alarme inoperante (R$ 1.250.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Carro parado na porta', 1250000)">+ Carro parado na porta (R$ 1.250.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Extintores vencidos', 500000)">+ Extintores vencidos (R$
+            500.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Saída de emergência bloqueada', 1000000)">+ Saída bloqueada
+            (R$ 1.000.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Falta de sinalização', 750000)">+ Falta de sinalização (R$
+            750.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Sistema de alarme inoperante', 1250000)">+ Alarme inoperante
+            (R$ 1.250.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Carro parado na porta', 1250000)">+ Carro parado na porta
+            (R$ 1.250.000)</button></div>
         <br>
         <button onclick="limparTudo()">Limpar</button>
       </div>
@@ -127,10 +163,10 @@
       // Salva a posição do cursor
       const startPos = input.selectionStart;
       const endPos = input.selectionEnd;
-      
+
       // Obtém o valor atual sem formatação
       const valor = input.value.replace(/[^0-9]/g, '');
-      
+
       // Formata o valor
       let valorFormatado = '';
       if (valor.length > 0) {
@@ -140,14 +176,14 @@
           maximumFractionDigits: 2
         });
       }
-      
+
       // Atualiza o campo com o valor formatado
       input.value = valorFormatado;
-      
+
       // Restaura a posição do cursor, ajustando para a formatação
       const diff = valorFormatado.length - input.value.length;
       input.setSelectionRange(startPos + diff, endPos + diff);
-      
+
       // Atualiza o extrato
       atualizarExtrato();
     }
@@ -186,4 +222,8 @@
     }
   </script>
 </body>
+<footer class="rodape">
+  © 2025 Bombeiros Cidade Santa — Criado por Guilherme R⚡
+</footer>
+
 </html>
