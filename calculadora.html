@@ -8,34 +8,52 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
       background-color: #b30000;
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin: 0;
+      padding: 300px;
+      background-image: url("fundo.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+    }
+
+    .conteudo {
+      background-color: rgba(255, 255, 255, 0.95);
+      width: 95%;
+      max-width: 1000px;
+      margin: 10px auto;
+      padding: 100px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
 
     h1 {
-      color: white;
+      color: #b30000;
       text-align: center;
-      padding: 20px 0;
+      padding: 0 0 30px 0;
+      margin: 0;
+      font-size: 2.5em;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
     .main-box {
       background: #fff;
-      padding: 20px;
+      padding: 30px;
       border-radius: 10px;
-      width: 90%;
-      max-width: 1200px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 40px;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      border: 1px solid #e0e0e0;
     }
 
     .top-form {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       display: flex;
-      gap: 20px;
+      gap: 30px;
       align-items: flex-end;
     }
 
@@ -43,117 +61,124 @@
       flex: 1;
     }
 
+    .form-group label h3 {
+      margin-bottom: 8px;
+      color: #333;
+    }
+
     input[type="text"],
     input[type="number"] {
-      width: 150px;
-      padding: 6px;
+      width: 100%;
+      max-width: 300px;
+      padding: 10px;
       margin-top: 4px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
     }
 
     .divider-horizontal {
-      border-top: 1px solid #ccc;
-      margin: 20px 0;
+      border-top: 2px solid #eee;
+      margin: 25px 0;
     }
 
     .content {
       display: flex;
       justify-content: space-between;
+      gap: 30px;
     }
 
     .multa button {
       background-color: #cc0000;
       color: white;
       border: none;
-      padding: 10px 15px;
+      padding: 12px 20px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.1s ease;
+      transition: all 0.3s ease;
       font-weight: bold;
       width: 100%;
       text-align: left;
+      font-size: 15px;
+      margin-bottom: 8px;
     }
 
     .multa button:hover:not(:disabled) {
       background-color: #a30000;
-      transform: scale(1.02);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     .multa button:active:not(:disabled) {
       background-color: #7a0000;
+      transform: translateY(0);
     }
 
     .multa button:disabled {
-      background-color: #cccccc;
+      background-color: #e0e0e0;
+      color: #999;
       cursor: not-allowed;
-      opacity: 0.7;
-    }
-
-    .extrair-btn {
-      background-color: #004d99;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: background-color 0.3s ease;
-    }
-
-    .extrair-btn:hover {
-      background-color: #003366;
+      transform: none !important;
     }
 
     .content>div {
       flex: 1;
     }
 
-    .multa {
-      margin-bottom: 10px;
-    }
-
     .extrato-box {
-      padding: 10px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      min-height: 200px;
     }
 
     .total {
       font-weight: bold;
-      margin-top: 10px;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px solid #eee;
+      font-size: 18px;
+      color: #b30000;
     }
 
     /* Estilos dos blocos com bordas */
     .form {
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 25px;
+      border-radius: 8px;
+      background-color: #fff;
     }
 
     .extrato {
-      border: 1px solid #ccc;
-      padding: 30px;
-      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 25px;
+      border-radius: 8px;
+      background-color: #fff;
+      height: fit-content;
     }
 
     .rodape {
       color: white;
-      font-size: 12px;
+      font-size: 14px;
       position: fixed;
-      bottom: 10px;
-      right: 15px;
-      background-color: transparent;
+      bottom: 15px;
+      right: 20px;
+      background-color: rgba(0,0,0,0.3);
+      padding: 5px 10px;
+      border-radius: 5px;
     }
 
     .limpar-btn {
       background-color: #666;
       color: white;
       border: none;
-      padding: 6px 12px;
+      padding: 10px 20px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      width: 100%;
     }
 
     .limpar-btn:hover {
@@ -163,150 +188,224 @@
     .botoes-extrato {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-top: 20px;
     }
 
     .extrato-btn {
       background-color: #cc0000;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 10px 20px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
+      width: 100%;
     }
 
     .extrato-btn:hover {
       background-color: #a30000;
+      transform: translateY(-2px);
     }
 
     .categoria {
       font-weight: bold;
-      margin-top: 15px;
-      margin-bottom: 5px;
+      margin-top: 25px;
+      margin-bottom: 10px;
       color: #b30000;
+      font-size: 18px;
+      padding-bottom: 5px;
+      border-bottom: 2px dashed #e0e0e0;
     }
 
     .divider-categoria {
-      border-top: 1px dashed #ccc;
-      margin: 10px 0;
+      border-top: 1px dashed #ddd;
+      margin: 15px 0;
     }
 
     .extrato-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background-color: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .extrato-item span {
+      flex-grow: 1;
     }
 
     .remover-multa {
       color: #cc0000;
       cursor: pointer;
-      margin-left: 10px;
+      margin-left: 15px;
       background: none;
       border: none;
-      font-size: 16px;
+      font-size: 18px;
+      transition: transform 0.2s ease;
     }
 
     .remover-multa:hover {
       color: #a30000;
+      transform: scale(1.2);
+    }
+
+    @media (max-width: 1200px) {
+      .content {
+        flex-direction: column;
+      }
+      
+      .conteudo {
+        padding: 30px;
+      }
+      
+      .top-form {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      input[type="text"],
+      input[type="number"] {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
-  <h1>Calculadora de Vistoria - Bombeiros</h1>
+  <div class="conteudo">
+    <h1>Calculadora de Vistoria - Bombeiros</h1>
 
-  <div class="main-box">
-    <div class="top-form">
-      <div class="form-group">
-        <label>
-          <h3>Nome da Instituição:</h3>
-        </label>
-        <input type="text" id="instituicao" placeholder="Ex: Hospital" oninput="atualizarExtrato()" />
+    <div class="main-box">
+      <div class="top-form">
+        <div class="form-group">
+          <label>
+            <h3>Nome da Instituição:</h3>
+          </label>
+          <input type="text" id="instituicao" placeholder="Ex: Hospital" oninput="atualizarExtrato()" />
+        </div>
+        <div class="form-group">
+          <label>
+            <h3>Inicial da Vistoria (R$):</h3>
+          </label>
+          <input type="text" id="valorInicial" value="0" oninput="formatarValorInput(this)" />
+        </div>
       </div>
-      <div class="form-group">
-        <label>
-          <h3>Inicial da Vistoria (R$):</h3>
-        </label>
-        <input type="text" id="valorInicial" value="0" oninput="formatarValorInput(this)" style="width: 150px;" />
-      </div>
-    </div>
 
-    <div class="divider-horizontal"></div>
+      <div class="divider-horizontal"></div>
 
-    <div class="content">
-      <div class="form">
-        <h2>Multas</h2>
-        
-        <div class="categoria">Saídas de Emergência</div>
-        <div class="multa"><button id="multa1" onclick="adicionarMulta('Rotas de fuga desobstruídas', 40000, 'multa1')">+ Rotas de fuga desobstruídas (R$ 40.000)</button></div>
-        <div class="multa"><button id="multa2" onclick="adicionarMulta('Rotas de fuga iluminadas', 40000, 'multa2')">+ Rotas de fuga iluminadas (R$ 40.000)</button></div>
-        <div class="multa"><button id="multa3" onclick="adicionarMulta('Piso íntegro e acessível', 10000, 'multa3')">+ Piso íntegro e acessível (R$ 10.000)</button></div>
-        <div class="multa"><button id="multa4" onclick="adicionarMulta('Luminárias de emergência nas rotas', 40000, 'multa4')">+ Luminárias de emergência nas rotas (R$ 40.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Escadas</div>
-        <div class="multa"><button id="multa5" onclick="adicionarMulta('Escadas desobstruídas', 50000, 'multa5')">+ Escadas desobstruídas (R$ 50.000)</button></div>
-        <div class="multa"><button id="multa6" onclick="adicionarMulta('Placas e iluminação nas escadas', 40000, 'multa6')">+ Placas e iluminação nas escadas (R$ 40.000)</button></div>
-        <div class="multa"><button id="multa7" onclick="adicionarMulta('Portas nas escadas', 40000, 'multa7')">+ Portas nas escadas (R$ 40.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Extintores</div>
-        <div class="multa"><button id="multa8" onclick="adicionarMulta('Extintores desobstruídos', 50000, 'multa8')">+ Extintores desobstruídos (R$ 50.000)</button></div>
-        <div class="multa"><button id="multa9" onclick="adicionarMulta('Extintores sinalizados', 50000, 'multa9')">+ Extintores sinalizados (R$ 50.000)</button></div>
-        <div class="multa"><button id="multa10" onclick="adicionarMulta('Extintores em local apropriado', 50000, 'multa10')">+ Extintores em local apropriado (R$ 50.000)</button></div>
-        <div class="multa"><button id="multa11" onclick="adicionarMulta('Quantidade de extintores (4 ou mais)', 50000, 'multa11')">+ Quantidade de extintores (4 ou mais) (R$ 50.000)</button></div>
-        <div class="multa"><button id="multa12" onclick="adicionarMulta('Extintores com sinais de danos', 50000, 'multa12')">+ Extintores com sinais de danos (R$ 50.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Sistema de Hidrantes</div>
-        <div class="multa"><button id="multa13" onclick="adicionarMulta('Hidrantes desobstruídos e sinalizados', 20000, 'multa13')">+ Hidrantes desobstruídos e sinalizados (R$ 20.000)</button></div>
-        <div class="multa"><button id="multa14" onclick="adicionarMulta('Tubulações pintadas de vermelho', 20000, 'multa14')">+ Tubulações pintadas de vermelho (R$ 20.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Sprinklers (Chuveiros Automáticos)</div>
-        <div class="multa"><button id="multa15" onclick="adicionarMulta('Existência de sprinklers', 10000, 'multa15')">+ Existência de sprinklers (R$ 10.000)</button></div>
-        <div class="multa"><button id="multa16" onclick="adicionarMulta('Distância correta entre chuveiros e paredes', 10000, 'multa16')">+ Distância correta entre chuveiros e paredes (R$ 10.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Iluminação e Sinalização</div>
-        <div class="multa"><button id="multa17" onclick="adicionarMulta('Iluminação de emergência funcionando', 10000, 'multa17')">+ Iluminação de emergência funcionando (R$ 10.000)</button></div>
-        <div class="multa"><button id="multa18" onclick="adicionarMulta('Sinalização de emergência visível', 10000, 'multa18')">+ Sinalização de emergência visível (R$ 10.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Acessibilidade</div>
-        <div class="multa"><button id="multa19" onclick="adicionarMulta('Rampas para cadeirantes', 30000, 'multa19')">+ Rampas para cadeirantes (R$ 30.000)</button></div>
-        <div class="multa"><button id="multa20" onclick="adicionarMulta('Portas e corredores largos para cadeirantes', 30000, 'multa20')">+ Portas e corredores largos para cadeirantes (R$ 30.000)</button></div>
-        
-        <div class="divider-categoria"></div>
-        
-        <div class="categoria">Outros Itens</div>
-        <div class="multa"><button id="multa21" onclick="adicionarMulta('Material inflamável perto das saídas', 50000, 'multa21')">+ Material inflamável perto das saídas (R$ 50.000)</button></div>
-        <div class="multa"><button id="multa22" onclick="adicionarMulta('Cabos ou fios expostos', 50000, 'multa22')">+ Cabos ou fios expostos (R$ 50.000)</button></div>
-        
-        <br>
-        <button class="limpar-btn" onclick="limparTudo()">Limpar Tudo</button>
-      </div> <!-- fecha .form -->
+      <div class="content">
+        <div class="form">
+          <h2>Multas</h2>
 
-      <div class="extrato">
-        <div>
-          <h2>Extrato</h2>
-          <div class="extrato-box" id="extrato">
-            Nenhuma vistoria registrada.
-          </div>
-          <div class="botoes-extrato">
-            <button class="extrato-btn" onclick="limparTudo()">Limpar</button>
-            <!-- <button class="extrato-btn" onclick="baixarExtrato()">Extrair Extrato</button> -->
+          <div class="categoria">Saídas de Emergência</div>
+          <div class="multa"><button id="multa1"
+              onclick="adicionarMulta('Rotas de fuga desobstruídas', 40000, 'multa1')">+ Rotas de fuga desobstruídas (R$
+              40.000)</button></div>
+          <div class="multa"><button id="multa2" onclick="adicionarMulta('Rotas de fuga iluminadas', 40000, 'multa2')">+
+              Rotas de fuga iluminadas (R$ 40.000)</button></div>
+          <div class="multa"><button id="multa3" onclick="adicionarMulta('Piso íntegro e acessível', 10000, 'multa3')">+
+              Piso íntegro e acessível (R$ 10.000)</button></div>
+          <div class="multa"><button id="multa4"
+              onclick="adicionarMulta('Luminárias de emergência nas rotas', 40000, 'multa4')">+ Luminárias de emergência
+              nas rotas (R$ 40.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Escadas</div>
+          <div class="multa"><button id="multa5" onclick="adicionarMulta('Escadas desobstruídas', 50000, 'multa5')">+
+              Escadas desobstruídas (R$ 50.000)</button></div>
+          <div class="multa"><button id="multa6"
+              onclick="adicionarMulta('Placas e iluminação nas escadas', 40000, 'multa6')">+ Placas e iluminação nas
+              escadas (R$ 40.000)</button></div>
+          <div class="multa"><button id="multa7" onclick="adicionarMulta('Portas nas escadas', 40000, 'multa7')">+
+              Portas nas escadas (R$ 40.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Extintores</div>
+          <div class="multa"><button id="multa8" onclick="adicionarMulta('Extintores desobstruídos', 50000, 'multa8')">+
+              Extintores desobstruídos (R$ 50.000)</button></div>
+          <div class="multa"><button id="multa9" onclick="adicionarMulta('Extintores sinalizados', 50000, 'multa9')">+
+              Extintores sinalizados (R$ 50.000)</button></div>
+          <div class="multa"><button id="multa10"
+              onclick="adicionarMulta('Extintores em local apropriado', 50000, 'multa10')">+ Extintores em local
+              apropriado (R$ 50.000)</button></div>
+          <div class="multa"><button id="multa11"
+              onclick="adicionarMulta('Quantidade de extintores (4 ou mais)', 50000, 'multa11')">+ Quantidade de
+              extintores (4 ou mais) (R$ 50.000)</button></div>
+          <div class="multa"><button id="multa12"
+              onclick="adicionarMulta('Extintores com sinais de danos', 50000, 'multa12')">+ Extintores com sinais de
+              danos (R$ 50.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Sistema de Hidrantes</div>
+          <div class="multa"><button id="multa13"
+              onclick="adicionarMulta('Hidrantes desobstruídos e sinalizados', 20000, 'multa13')">+ Hidrantes
+              desobstruídos e sinalizados (R$ 20.000)</button></div>
+          <div class="multa"><button id="multa14"
+              onclick="adicionarMulta('Tubulações pintadas de vermelho', 20000, 'multa14')">+ Tubulações pintadas de
+              vermelho (R$ 20.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Sprinklers (Chuveiros Automáticos)</div>
+          <div class="multa"><button id="multa15"
+              onclick="adicionarMulta('Existência de sprinklers', 10000, 'multa15')">+ Existência de sprinklers (R$
+              10.000)</button></div>
+          <div class="multa"><button id="multa16"
+              onclick="adicionarMulta('Distância correta entre chuveiros e paredes', 10000, 'multa16')">+ Distância
+              correta entre chuveiros e paredes (R$ 10.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Iluminação e Sinalização</div>
+          <div class="multa"><button id="multa17"
+              onclick="adicionarMulta('Iluminação de emergência funcionando', 10000, 'multa17')">+ Iluminação de
+              emergência funcionando (R$ 10.000)</button></div>
+          <div class="multa"><button id="multa18"
+              onclick="adicionarMulta('Sinalização de emergência visível', 10000, 'multa18')">+ Sinalização de
+              emergência visível (R$ 10.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Acessibilidade</div>
+          <div class="multa"><button id="multa19"
+              onclick="adicionarMulta('Rampas para cadeirantes', 30000, 'multa19')">+ Rampas para cadeirantes (R$
+              30.000)</button></div>
+          <div class="multa"><button id="multa20"
+              onclick="adicionarMulta('Portas e corredores largos para cadeirantes', 30000, 'multa20')">+ Portas e
+              corredores largos para cadeirantes (R$ 30.000)</button></div>
+
+          <div class="divider-categoria"></div>
+
+          <div class="categoria">Outros Itens</div>
+          <div class="multa"><button id="multa21"
+              onclick="adicionarMulta('Material inflamável perto das saídas', 50000, 'multa21')">+ Material inflamável
+              perto das saídas (R$ 50.000)</button></div>
+          <div class="multa"><button id="multa22" onclick="adicionarMulta('Cabos ou fios expostos', 50000, 'multa22')">+
+              Cabos ou fios expostos (R$ 50.000)</button></div>
+
+          <br>
+          <button class="limpar-btn" onclick="limparTudo()">Limpar Tudo</button>
+        </div> <!-- fecha .form -->
+
+        <div class="extrato">
+          <div>
+            <h2>Extrato</h2>
+            <div class="extrato-box" id="extrato">
+              Nenhuma vistoria registrada.
+            </div>
+            <div class="botoes-extrato">
+              <button class="extrato-btn" onclick="limparTudo()">Limpar</button>
+              <!-- <button class="extrato-btn" onclick="baixarExtrato()">Extrair Extrato</button> -->
+            </div>
           </div>
         </div>
       </div>
@@ -360,8 +459,8 @@
       if (jaExiste) return;
 
       // Adiciona a multa
-      multas.push({ 
-        nome, 
+      multas.push({
+        nome,
         valor,
         botaoId // Armazena o ID do botão para poder reativá-lo depois
       });
