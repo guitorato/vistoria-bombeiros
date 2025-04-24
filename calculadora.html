@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Calculadora de Vistoria - Bombeiros</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -72,13 +73,19 @@
       text-align: left;
     }
 
-    .multa button:hover {
+    .multa button:hover:not(:disabled) {
       background-color: #a30000;
       transform: scale(1.02);
     }
 
-    .multa button:active {
+    .multa button:active:not(:disabled) {
       background-color: #7a0000;
+    }
+
+    .multa button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.7;
     }
 
     .extrair-btn {
@@ -175,6 +182,38 @@
     .extrato-btn:hover {
       background-color: #a30000;
     }
+
+    .categoria {
+      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #b30000;
+    }
+
+    .divider-categoria {
+      border-top: 1px dashed #ccc;
+      margin: 10px 0;
+    }
+
+    .extrato-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .remover-multa {
+      color: #cc0000;
+      cursor: pointer;
+      margin-left: 10px;
+      background: none;
+      border: none;
+      font-size: 16px;
+    }
+
+    .remover-multa:hover {
+      color: #a30000;
+    }
   </style>
 </head>
 
@@ -202,16 +241,61 @@
     <div class="content">
       <div class="form">
         <h2>Multas</h2>
-        <div class="multa"><button onclick="adicionarMulta('Extintores vencidos', 500000)">+ Extintores vencidos (R$
-            500.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Saída de emergência bloqueada', 1000000)">+ Saída bloqueada
-            (R$ 1.000.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Falta de sinalização', 750000)">+ Falta de sinalização (R$
-            750.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Sistema de alarme inoperante', 1250000)">+ Alarme inoperante
-            (R$ 1.250.000)</button></div>
-        <div class="multa"><button onclick="adicionarMulta('Carro parado na porta', 1250000)">+ Carro parado na porta
-            (R$ 1.250.000)</button></div>
+        
+        <div class="categoria">Saídas de Emergência</div>
+        <div class="multa"><button id="multa1" onclick="adicionarMulta('Rotas de fuga desobstruídas', 40000, 'multa1')">+ Rotas de fuga desobstruídas (R$ 40.000)</button></div>
+        <div class="multa"><button id="multa2" onclick="adicionarMulta('Rotas de fuga iluminadas', 40000, 'multa2')">+ Rotas de fuga iluminadas (R$ 40.000)</button></div>
+        <div class="multa"><button id="multa3" onclick="adicionarMulta('Piso íntegro e acessível', 10000, 'multa3')">+ Piso íntegro e acessível (R$ 10.000)</button></div>
+        <div class="multa"><button id="multa4" onclick="adicionarMulta('Luminárias de emergência nas rotas', 40000, 'multa4')">+ Luminárias de emergência nas rotas (R$ 40.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Escadas</div>
+        <div class="multa"><button id="multa5" onclick="adicionarMulta('Escadas desobstruídas', 50000, 'multa5')">+ Escadas desobstruídas (R$ 50.000)</button></div>
+        <div class="multa"><button id="multa6" onclick="adicionarMulta('Placas e iluminação nas escadas', 40000, 'multa6')">+ Placas e iluminação nas escadas (R$ 40.000)</button></div>
+        <div class="multa"><button id="multa7" onclick="adicionarMulta('Portas nas escadas', 40000, 'multa7')">+ Portas nas escadas (R$ 40.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Extintores</div>
+        <div class="multa"><button id="multa8" onclick="adicionarMulta('Extintores desobstruídos', 50000, 'multa8')">+ Extintores desobstruídos (R$ 50.000)</button></div>
+        <div class="multa"><button id="multa9" onclick="adicionarMulta('Extintores sinalizados', 50000, 'multa9')">+ Extintores sinalizados (R$ 50.000)</button></div>
+        <div class="multa"><button id="multa10" onclick="adicionarMulta('Extintores em local apropriado', 50000, 'multa10')">+ Extintores em local apropriado (R$ 50.000)</button></div>
+        <div class="multa"><button id="multa11" onclick="adicionarMulta('Quantidade de extintores (4 ou mais)', 50000, 'multa11')">+ Quantidade de extintores (4 ou mais) (R$ 50.000)</button></div>
+        <div class="multa"><button id="multa12" onclick="adicionarMulta('Extintores com sinais de danos', 50000, 'multa12')">+ Extintores com sinais de danos (R$ 50.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Sistema de Hidrantes</div>
+        <div class="multa"><button id="multa13" onclick="adicionarMulta('Hidrantes desobstruídos e sinalizados', 20000, 'multa13')">+ Hidrantes desobstruídos e sinalizados (R$ 20.000)</button></div>
+        <div class="multa"><button id="multa14" onclick="adicionarMulta('Tubulações pintadas de vermelho', 20000, 'multa14')">+ Tubulações pintadas de vermelho (R$ 20.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Sprinklers (Chuveiros Automáticos)</div>
+        <div class="multa"><button id="multa15" onclick="adicionarMulta('Existência de sprinklers', 10000, 'multa15')">+ Existência de sprinklers (R$ 10.000)</button></div>
+        <div class="multa"><button id="multa16" onclick="adicionarMulta('Distância correta entre chuveiros e paredes', 10000, 'multa16')">+ Distância correta entre chuveiros e paredes (R$ 10.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Iluminação e Sinalização</div>
+        <div class="multa"><button id="multa17" onclick="adicionarMulta('Iluminação de emergência funcionando', 10000, 'multa17')">+ Iluminação de emergência funcionando (R$ 10.000)</button></div>
+        <div class="multa"><button id="multa18" onclick="adicionarMulta('Sinalização de emergência visível', 10000, 'multa18')">+ Sinalização de emergência visível (R$ 10.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Acessibilidade</div>
+        <div class="multa"><button id="multa19" onclick="adicionarMulta('Rampas para cadeirantes', 30000, 'multa19')">+ Rampas para cadeirantes (R$ 30.000)</button></div>
+        <div class="multa"><button id="multa20" onclick="adicionarMulta('Portas e corredores largos para cadeirantes', 30000, 'multa20')">+ Portas e corredores largos para cadeirantes (R$ 30.000)</button></div>
+        
+        <div class="divider-categoria"></div>
+        
+        <div class="categoria">Outros Itens</div>
+        <div class="multa"><button id="multa21" onclick="adicionarMulta('Material inflamável perto das saídas', 50000, 'multa21')">+ Material inflamável perto das saídas (R$ 50.000)</button></div>
+        <div class="multa"><button id="multa22" onclick="adicionarMulta('Cabos ou fios expostos', 50000, 'multa22')">+ Cabos ou fios expostos (R$ 50.000)</button></div>
+        
+        <br>
+        <button class="limpar-btn" onclick="limparTudo()">Limpar Tudo</button>
       </div> <!-- fecha .form -->
 
       <div class="extrato">
@@ -270,12 +354,44 @@
       atualizarExtrato();
     }
 
-    function adicionarMulta(nome, valor) {
-      multas.push({ nome, valor });
+    function adicionarMulta(nome, valor, botaoId) {
+      // Verifica se a multa já foi adicionada
+      const jaExiste = multas.some(m => m.nome === nome);
+      if (jaExiste) return;
+
+      // Adiciona a multa
+      multas.push({ 
+        nome, 
+        valor,
+        botaoId // Armazena o ID do botão para poder reativá-lo depois
+      });
+
+      // Desabilita o botão
+      document.getElementById(botaoId).disabled = true;
+
+      atualizarExtrato();
+    }
+
+    function removerMulta(index, botaoId) {
+      // Remove a multa do array
+      multas.splice(index, 1);
+      
+      // Reativa o botão correspondente
+      if (botaoId) {
+        document.getElementById(botaoId).disabled = false;
+      }
+      
       atualizarExtrato();
     }
 
     function limparTudo() {
+      // Reativa todos os botões antes de limpar
+      multas.forEach(m => {
+        if (m.botaoId) {
+          document.getElementById(m.botaoId).disabled = false;
+        }
+      });
+      
       multas = [];
       document.getElementById('valorInicial').value = '0';
       document.getElementById('instituicao').value = '';
@@ -288,14 +404,28 @@
       const valorInicialStr = document.getElementById('valorInicial').value;
       const valorInicial = parseValor(valorInicialStr);
 
-      let html = `<strong>Instituição:</strong> ${nome || 'N/D'}<br>`;
-      html += `<strong>Valor inicial:</strong> ${formatar(valorInicial)}<br><br>`;
+      if (multas.length === 0 && !nome && valorInicial === 0) {
+        extrato.innerHTML = 'Nenhuma vistoria registrada.';
+        return;
+      }
+
+      let html = `<div><strong>Instituição:</strong> ${nome || 'N/D'}</div>`;
+      html += `<div><strong>Valor inicial:</strong> ${formatar(valorInicial)}</div><br>`;
+      
       let total = valorInicial;
-      multas.forEach(m => {
-        html += `+ ${m.nome}: ${formatar(m.valor)}<br>`;
+      multas.forEach((m, index) => {
+        html += `
+          <div class="extrato-item">
+            <span>+ ${m.nome}: ${formatar(m.valor)}</span>
+            <button class="remover-multa" onclick="removerMulta(${index}, '${m.botaoId}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
         total += m.valor;
       });
-      html += `<br class="total"><strong>Total Final:</strong> ${formatar(total)}`;
+      
+      html += `<div class="total"><strong>Total Final:</strong> ${formatar(total)}</div>`;
       extrato.innerHTML = html;
     }
 
