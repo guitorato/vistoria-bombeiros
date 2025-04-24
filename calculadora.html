@@ -59,6 +59,45 @@
       justify-content: space-between;
     }
 
+    .multa button {
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      font-weight: bold;
+      width: 100%;
+      text-align: left;
+    }
+
+    .multa button:hover {
+      background-color: #a30000;
+      transform: scale(1.02);
+    }
+
+    .multa button:active {
+      background-color: #7a0000;
+    }
+
+    .extrair-btn {
+      background-color: #004d99;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .extrair-btn:hover {
+      background-color: #003366;
+    }
+
     .content>div {
       flex: 1;
     }
@@ -97,6 +136,45 @@
       right: 15px;
       background-color: transparent;
     }
+
+    .limpar-btn {
+      background-color: #666;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .limpar-btn:hover {
+      background-color: #444;
+    }
+
+    .botoes-extrato {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .extrato-btn {
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .extrato-btn:hover {
+      background-color: #a30000;
+    }
   </style>
 </head>
 
@@ -134,14 +212,18 @@
             (R$ 1.250.000)</button></div>
         <div class="multa"><button onclick="adicionarMulta('Carro parado na porta', 1250000)">+ Carro parado na porta
             (R$ 1.250.000)</button></div>
-        <br>
-        <button onclick="limparTudo()">Limpar</button>
-      </div>
+      </div> <!-- fecha .form -->
 
       <div class="extrato">
-        <h2>Extrato</h2>
-        <div class="extrato-box" id="extrato">
-          Nenhuma vistoria registrada.
+        <div>
+          <h2>Extrato</h2>
+          <div class="extrato-box" id="extrato">
+            Nenhuma vistoria registrada.
+          </div>
+          <div class="botoes-extrato">
+            <button class="extrato-btn" onclick="limparTudo()">Limpar</button>
+            <button class="extrato-btn" onclick="baixarExtrato()">Extrair Extrato</button>
+          </div>
         </div>
       </div>
     </div>
@@ -219,6 +301,32 @@
 
     window.onload = () => {
       atualizarExtrato();
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    function baixarExtrato() {
+      const extrato = document.querySelector('.extrato');
+      const limparBtn = extrato.querySelector('.limpar-btn');
+      const extrairBtn = extrato.querySelector('.extrair-btn');
+
+      // Esconde os botões
+      limparBtn.style.display = 'none';
+      extrairBtn.style.display = 'none';
+
+      // Aguarda um pequeno delay para garantir o reflow
+      setTimeout(() => {
+        html2canvas(extrato).then(canvas => {
+          // Restaura os botões
+          limparBtn.style.display = 'inline-block';
+          extrairBtn.style.display = 'inline-block';
+
+          const link = document.createElement('a');
+          link.download = 'extrato_vistoria.png';
+          link.href = canvas.toDataURL();
+          link.click();
+        });
+      }, 100);
     }
   </script>
 </body>
