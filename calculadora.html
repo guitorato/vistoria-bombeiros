@@ -23,7 +23,7 @@
       padding: 20px;
       border-radius: 10px;
       width: 90%;
-      max-width: 1000px;
+      max-width: 1200px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       margin-bottom: 40px;
     }
@@ -52,16 +52,25 @@
     .content > div {
       flex: 1;
     }
-    .vertical-line {
-      width: 1px;
-      background: #ccc;
-      margin: 0 20px;
+    .multa { 
+      margin-bottom: 10px; 
     }
-    .multa { margin-bottom: 10px; }
     .extrato-box {
       padding: 10px 0;
     }
     .total { font-weight: bold; margin-top: 10px; }
+    
+    /* Estilos dos blocos com bordas */
+    .form {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .extrato {
+      border: 1px solid #ccc;
+      padding: 30px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -70,12 +79,12 @@
   <div class="main-box">
     <div class="top-form">
       <div class="form-group">
-        <label>Nome da Instituição:</label><br>
+        <label><h3>Nome da Instituição:</h3></label>
         <input type="text" id="instituicao" placeholder="Ex: Hospital" oninput="atualizarExtrato()" />
       </div>
       <div class="form-group">
-        <label>Valor Inicial da Vistoria (R$):</label><br>
-        <input type="text" id="valorInicial" value="0" oninput="atualizarExtrato()" />
+        <label><h3>Inicial da Vistoria (R$):</h3></label>
+        <input type="text" id="valorInicial" value="0" oninput="formatarValorInput(this)" style="width: 150px;" />
       </div>
     </div>
 
@@ -88,11 +97,10 @@
         <div class="multa"><button onclick="adicionarMulta('Saída de emergência bloqueada', 1000000)">+ Saída bloqueada (R$ 1.000.000)</button></div>
         <div class="multa"><button onclick="adicionarMulta('Falta de sinalização', 750000)">+ Falta de sinalização (R$ 750.000)</button></div>
         <div class="multa"><button onclick="adicionarMulta('Sistema de alarme inoperante', 1250000)">+ Alarme inoperante (R$ 1.250.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Carro parado na porta', 1250000)">+ Carro parado na porta (R$ 1.250.000)</button></div>
         <br>
         <button onclick="limparTudo()">Limpar</button>
       </div>
-
-      <div class="vertical-line"></div>
 
       <div class="extrato">
         <h2>Extrato</h2>
@@ -111,8 +119,37 @@
     }
 
     function parseValor(valorStr) {
-      const limpo = valorStr.replace(/[^0-9,]/g, '').replace(',', '.');
-      return parseFloat(limpo) || 0;
+      const limpo = valorStr.replace(/[^0-9]/g, '');
+      return parseFloat(limpo) / 100 || 0;
+    }
+
+    function formatarValorInput(input) {
+      // Salva a posição do cursor
+      const startPos = input.selectionStart;
+      const endPos = input.selectionEnd;
+      
+      // Obtém o valor atual sem formatação
+      const valor = input.value.replace(/[^0-9]/g, '');
+      
+      // Formata o valor
+      let valorFormatado = '';
+      if (valor.length > 0) {
+        const valorNumerico = parseFloat(valor) / 100;
+        valorFormatado = valorNumerico.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+      
+      // Atualiza o campo com o valor formatado
+      input.value = valorFormatado;
+      
+      // Restaura a posição do cursor, ajustando para a formatação
+      const diff = valorFormatado.length - input.value.length;
+      input.setSelectionRange(startPos + diff, endPos + diff);
+      
+      // Atualiza o extrato
+      atualizarExtrato();
     }
 
     function adicionarMulta(nome, valor) {
@@ -132,8 +169,6 @@
       const nome = document.getElementById('instituicao').value;
       const valorInicialStr = document.getElementById('valorInicial').value;
       const valorInicial = parseValor(valorInicialStr);
-
-      document.getElementById('valorInicial').value = formatar(valorInicial);
 
       let html = `<strong>Instituição:</strong> ${nome || 'N/D'}<br>`;
       html += `<strong>Valor inicial:</strong> ${formatar(valorInicial)}<br><br>`;
