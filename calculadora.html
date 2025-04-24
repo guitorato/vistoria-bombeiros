@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Vistoria - Bombeiros</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #b30000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .main-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 1000px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    .top-form {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+    }
+    .form-group {
+      flex: 1;
+    }
+    input[type="text"], input[type="number"] {
+      width: 150px;
+      padding: 6px;
+      margin-top: 4px;
+    }
+    .divider-horizontal {
+      border-top: 1px solid #ccc;
+      margin: 20px 0;
+    }
+    .content {
+      display: flex;
+      justify-content: space-between;
+    }
+    .content > div {
+      flex: 1;
+    }
+    .vertical-line {
+      width: 1px;
+      background: #ccc;
+      margin: 0 20px;
+    }
+    .multa { margin-bottom: 10px; }
+    .extrato-box {
+      padding: 10px 0;
+    }
+    .total { font-weight: bold; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Vistoria - Bombeiros</h1>
+
+  <div class="main-box">
+    <div class="top-form">
+      <div class="form-group">
+        <label>Nome da Instituição:</label><br>
+        <input type="text" id="instituicao" placeholder="Ex: Hospital" oninput="atualizarExtrato()" />
+      </div>
+      <div class="form-group">
+        <label>Valor Inicial da Vistoria (R$):</label><br>
+        <input type="text" id="valorInicial" value="0" oninput="atualizarExtrato()" />
+      </div>
+    </div>
+
+    <div class="divider-horizontal"></div>
+
+    <div class="content">
+      <div class="form">
+        <h2>Multas</h2>
+        <div class="multa"><button onclick="adicionarMulta('Extintores vencidos', 500000)">+ Extintores vencidos (R$ 500.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Saída de emergência bloqueada', 1000000)">+ Saída bloqueada (R$ 1.000.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Falta de sinalização', 750000)">+ Falta de sinalização (R$ 750.000)</button></div>
+        <div class="multa"><button onclick="adicionarMulta('Sistema de alarme inoperante', 1250000)">+ Alarme inoperante (R$ 1.250.000)</button></div>
+        <br>
+        <button onclick="limparTudo()">Limpar</button>
+      </div>
+
+      <div class="vertical-line"></div>
+
+      <div class="extrato">
+        <h2>Extrato</h2>
+        <div class="extrato-box" id="extrato">
+          Nenhuma vistoria registrada.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let multas = [];
+
+    function formatar(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function parseValor(valorStr) {
+      const limpo = valorStr.replace(/[^0-9,]/g, '').replace(',', '.');
+      return parseFloat(limpo) || 0;
+    }
+
+    function adicionarMulta(nome, valor) {
+      multas.push({ nome, valor });
+      atualizarExtrato();
+    }
+
+    function limparTudo() {
+      multas = [];
+      document.getElementById('valorInicial').value = '0';
+      document.getElementById('instituicao').value = '';
+      atualizarExtrato();
+    }
+
+    function atualizarExtrato() {
+      const extrato = document.getElementById('extrato');
+      const nome = document.getElementById('instituicao').value;
+      const valorInicialStr = document.getElementById('valorInicial').value;
+      const valorInicial = parseValor(valorInicialStr);
+
+      document.getElementById('valorInicial').value = formatar(valorInicial);
+
+      let html = `<strong>Instituição:</strong> ${nome || 'N/D'}<br>`;
+      html += `<strong>Valor inicial:</strong> ${formatar(valorInicial)}<br><br>`;
+      let total = valorInicial;
+      multas.forEach(m => {
+        html += `+ ${m.nome}: ${formatar(m.valor)}<br>`;
+        total += m.valor;
+      });
+      html += `<br class="total"><strong>Total Final:</strong> ${formatar(total)}`;
+      extrato.innerHTML = html;
+    }
+
+    window.onload = () => {
+      atualizarExtrato();
+    }
+  </script>
+</body>
+</html>
