@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Venda de Medicamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-image: url("fundo.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+            gap: 20px;
+            flex: 1;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 26px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px 20px;
+            border-radius: 10px;
+        }
+
+        .topo {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: left;
+            width: 40%;
+            min-width: 280px;
+        }
+
+        .topo label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .topo input {
+            width: 30%;
+            padding: 6px;
+            font-size: 14px;
+        }
+
+        .conteudo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .medicamentos,
+        .extrato {
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .linha-medicamento {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .linha-medicamento input[type="number"] {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .linha-medicamento input[placeholder="Qtd"] {
+            width: 60px;
+        }
+
+        .linha-medicamento input[placeholder="Valor"] {
+            width: 100px;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 230px;
+            justify-content: left;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 6px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f70707;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #3a0101;
+        }
+
+        .extrato h2 {
+            margin-top: 0;
+        }
+
+        .extrato p {
+            margin: 5px 0;
+        }
+
+        .rodape {
+            color: white;
+            font-size: 12px;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+
+            .titulo-principal {
+                text-align: center;
+                font-size: 22px;
+            }
+
+            .topo input {
+                width: 90%;
+            }
+
+            .medicamentos,
+            .extrato {
+                width: 20%;
+            }
+
+            .conteudo {
+                flex-direction: column;
+                gap: 20px;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Calculadora de Venda de Medicamentos</h1>
+
+        <div class="topo">
+            <label>Nome da FAC/ORG:</label>
+            <input type="text" id="fac" oninput="atualizarExtrato()">
+
+            <label>Nome do Cliente:</label>
+            <input type="text" id="cliente" oninput="atualizarExtrato()">
+
+            <label>Passaporte do Cliente:</label>
+            <input type="text" id="passaporte" oninput="atualizarExtrato()">
+
+            <div class="botoes">
+                <button onclick="limparPrincipais()">Limpar Informações Principais</button>
+                <button onclick="limparExtrato()">Limpar Extrato</button>
+            </div>
+        </div>
+
+        <div class="conteudo">
+            <div class="medicamentos">
+                <h3>Medicamentos</h3>
+                <div class="linha-medicamento">
+                    <label>Adrenalina:</label>
+                    <input type="number" placeholder="Qtd" id="qtd_adrenalina" oninput="atualizarExtrato()">
+                    <input type="number" placeholder="Valor" id="val_adrenalina" oninput="atualizarExtrato()">
+                </div>
+                <div class="linha-medicamento">
+                    <label>Kit Médico:</label>
+                    <input type="number" placeholder="Qtd" id="qtd_kit" oninput="atualizarExtrato()">
+                    <input type="number" placeholder="Valor" id="val_kit" oninput="atualizarExtrato()">
+                </div>
+                <div class="linha-medicamento">
+                    <label>Bandagem:</label>
+                    <input type="number" placeholder="Qtd" id="qtd_bandagem" oninput="atualizarExtrato()">
+                    <input type="number" placeholder="Valor" id="val_bandagem" oninput="atualizarExtrato()">
+                </div>
+            </div>
+
+            <div class="extrato" id="extrato">
+                <h2>Extrato</h2>
+                <p><strong>FAC/ORG:</strong> <span id="out_fac"></span></p>
+                <p><strong>Cliente:</strong> <span id="out_cliente"></span></p>
+                <p><strong>Passaporte:</strong> <span id="out_passaporte"></span></p>
+                <hr>
+                <div id="medicamentos_resumo"></div>
+                <hr>
+                <p><strong>Valor Total:</strong> R$ <span id="total"></span></p>
+                <p><strong>Depósito (50%):</strong> R$ <span id="deposito"></span></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const formatarBRL = (valor) => {
+            return valor.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        function atualizarExtrato() {
+            document.getElementById("out_fac").textContent = document.getElementById("fac").value;
+            document.getElementById("out_cliente").textContent = document.getElementById("cliente").value;
+            document.getElementById("out_passaporte").textContent = document.getElementById("passaporte").value;
+
+            const medicamentos = [
+                { nome: 'Adrenalina', qtd: +document.getElementById("qtd_adrenalina").value || 0, val: +document.getElementById("val_adrenalina").value || 0 },
+                { nome: 'Kit Médico', qtd: +document.getElementById("qtd_kit").value || 0, val: +document.getElementById("val_kit").value || 0 },
+                { nome: 'Bandagem', qtd: +document.getElementById("qtd_bandagem").value || 0, val: +document.getElementById("val_bandagem").value || 0 },
+            ];
+
+            let total = 0;
+            let resumoHTML = '';
+
+            medicamentos.forEach(med => {
+                if (med.qtd > 0 && med.val > 0) {
+                    const subtotal = med.qtd * med.val;
+                    total += subtotal;
+                    resumoHTML += `<p>${med.nome} - Qtd: ${med.qtd} x R$${formatarBRL(med.val)} = R$${formatarBRL(subtotal)}</p>`;
+                }
+            });
+
+            document.getElementById("medicamentos_resumo").innerHTML = resumoHTML || "<p>Nenhum medicamento preenchido.</p>";
+            document.getElementById("total").textContent = formatarBRL(total);
+            document.getElementById("deposito").textContent = formatarBRL(total / 2);
+        }
+
+        function limparPrincipais() {
+            document.getElementById("fac").value = '';
+            document.getElementById("cliente").value = '';
+            document.getElementById("passaporte").value = '';
+            atualizarExtrato();
+        }
+
+        function limparExtrato() {
+            ["qtd_adrenalina", "val_adrenalina", "qtd_kit", "val_kit", "qtd_bandagem", "val_bandagem"].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            atualizarExtrato();
+        }
+    </script>
+    <footer class="rodape">
+        © 2025 Bombeiros Cidade Santa — Criado por Guilherme R⚡
+    </footer>
+</body>
+
+</html>
