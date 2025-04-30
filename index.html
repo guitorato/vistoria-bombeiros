@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Início</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url("fundo.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    .topo {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 15px 0;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      width: 300%;
+    }
+
+    .botao {
+      display: block;
+      padding: 25px 60px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 2px solid #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      width: 300px;
+      text-align: center;
+    }
+
+    .botao:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: #ff0000;
+      color: #ff0000;
+    }
+
+    .rodape {
+      color: white;
+      font-size: 12px;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 5px;
+      text-align: right;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .topo {
+        font-size: 20px;
+      }
+
+      .botao {
+        width: 80%;
+        font-size: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topo">
+    🚒 Bombeiros 🚒 - Cidade Santa
+  </div>
+
+  <div class="container">
+    <a href="/calculadora.html" class="botao">Calculadora de Medicamentos</a>
+    <a href="/vendas.html" class="botao">Histórico de Vendas</a>
+  </div>
+
+  <footer class="rodape">
+    © 2025 Bombeiros Cidade Santa — Criado por Guilherme R⚡
+  </footer>
+
+</body>
+</html>
