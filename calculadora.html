@@ -345,6 +345,14 @@
       ]
     };
 
+    const POS = {
+      x: 70,        // margem esquerda base do bloco de textos
+      yStart: 462,  // linha inicial (logo abaixo da linha vermelha do modelo)
+      line: 24,     // espaçamento entre linhas
+      sigX: 420,    // assinatura: eixo X (central da assinatura)
+      sigY: 800     // assinatura: eixo Y (perto do rodapé direito)
+    };
+
     // Estado das quantidades
     const qtd = {}; // chave = nome da multa -> quantidade
 
@@ -459,7 +467,7 @@
     async function gerarAlvara() {
       const { jsPDF } = window.jspdf;
 
-      // ---- Campos
+      // ---- Campos (valores em negrito)
       const razao = (document.getElementById("razao").value || "").trim();
       const resp = (document.getElementById("respLegal").value || "").trim();
       const id = (document.getElementById("idPessoa").value || "").trim();
@@ -473,45 +481,58 @@
       const fmtDataHora = d => d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
       const fmtData = d => d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-      // ---- PDF
+      // ---- PDF A4
       const pdf = new jsPDF({ unit: "pt", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
 
-      // Tenta carregar template como dataURL (mais compatível)
+      // Fundo template (tamanho cheio)
       try {
         const imgData = await carregarTemplateComoDataURL(ALVARA_TEMPLATE_SRC);
-        if (imgData) {
-          pdf.addImage(imgData, "PNG", 0, 0, pageW, pageH);  // cobre a página toda
-        }
+        pdf.addImage(imgData, "PNG", 0, 0, pageW, pageH);
       } catch (e) {
-        console.warn("Falha ao carregar o template do alvará:", e);
+        console.warn("Falha ao carregar o template:", e);
       }
 
-      // ---- Texto (ajuste fino de posições aqui)
+      // ===== Escrever linhas (label normal + valor em negrito) =====
       pdf.setTextColor(0, 0, 0);
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(12);
+      const LBL_FONT = () => pdf.setFont("helvetica", "normal");
+      const VAL_FONT = () => pdf.setFont("helvetica", "bold");
 
-      const X = 60;   // margem esquerda
-      let y = 420;  // logo abaixo da linha vermelha do seu modelo
+      const writeRow = (label, value, x, y) => {
+        // label
+        LBL_FONT(); pdf.setFontSize(12);
+        pdf.text(`${label}: `, x, y);
 
-      pdf.text(`Razão social: ${razao}`, X, y); y += 22;
-      pdf.text(`Data de emissão: ${fmtDataHora(emissao)}`, X, y); y += 22;
-      pdf.text(`Data de renovação: ${fmtData(renov)}`, X, y); y += 22;
-      pdf.text(`Responsável legal: ${resp}`, X, y); y += 22;
-      pdf.text(`ID: ${id}`, X, y); y += 22;
-      pdf.text(`Cargo: ${cargo}`, X, y); y += 22;
-      pdf.text(`Contato: ${contato}`, X, y); y += 40;
+        // valor em negrito (logo na sequência do label)
+        const labelWidth = pdf.getTextWidth(`${label}: `);
+        VAL_FONT(); pdf.setFontSize(12);
+        pdf.text(value || "—", x + labelWidth, y);
+      };
 
-      // Assinatura (parte de baixo à direita)
-      pdf.setFontSize(14);
-      pdf.text(militar || "", pageW - 220, pageH - 75, { align: "center" });
+      let y = POS.yStart;
+      writeRow("Razão social", razao, POS.x, y); y += POS.line;
+      writeRow("Data de emissão", fmtDataHora(emissao), POS.x, y); y += POS.line;
+      writeRow("Data de renovação", fmtData(renov), POS.x, y); y += POS.line;
+      writeRow("Responsável legal", resp, POS.x, y); y += POS.line;
+      writeRow("ID", id, POS.x, y); y += POS.line;
+      writeRow("Cargo", cargo, POS.x, y); y += POS.line;
+      writeRow("Contato", contato, POS.x, y); y += POS.line + 10;
 
-      pdf.save(`alvara_${(razao || "empresa").replace(/\\s+/g, "_")}.pdf`);
+      // ===== Assinatura (vermelha, “estilo caneta”) =====
+      pdf.setTextColor(178, 34, 34);       // vermelho (tom próximo ao do exemplo)
+      pdf.setFont("times", "italic");      // estilo cursivo básico; posso embutir fonte .ttf se quiser igual
+      pdf.setFontSize(26);
+      pdf.text(militar || "", POS.sigX, POS.sigY, { align: "center" });
+
+      // volta cor preta pro resto, se precisar
+      pdf.setTextColor(0, 0, 0);
+
+      // salvar
+      pdf.save(`alvara_${(razao || "empresa").replace(/\s+/g, "_")}.pdf`);
     }
 
-    // Usa fetch → blob → dataURL (evita problemas de CORS/Imagem)
+    // fetch -> blob -> dataURL (evita CORS/local issues)
     async function carregarTemplateComoDataURL(src) {
       const res = await fetch(src);
       if (!res.ok) throw new Error(`HTTP ${res.status} ao carregar ${src}`);
@@ -522,7 +543,6 @@
         fr.readAsDataURL(blob);
       });
     }
-
     /*********** INIT ***********/
     montarCategorias();
     atualizarExtrato();
