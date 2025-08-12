@@ -346,11 +346,11 @@
     };
 
     const POS = {
-      x: 58,         // margem esquerda das linhas
-      yStart: 448,   // linha inicial (logo abaixo da faixa vermelha)
-      line: 26,      // espaçamento entre linhas
-      sigX: null,    // se null, calcula baseado na largura (fica à direita)
-      sigY: 800      // altura da assinatura
+      x: 70,        // margem esquerda base do bloco de textos
+      yStart: 520,  // linha inicial (logo abaixo da linha vermelha do modelo)
+      line: 24,     // espaçamento entre linhas
+      sigX: 420,    // assinatura: eixo X (central da assinatura)
+      sigY: 730     // assinatura: eixo Y (perto do rodapé direito)
     };
 
     // Estado das quantidades
@@ -467,13 +467,13 @@
     async function gerarAlvara() {
       const { jsPDF } = window.jspdf;
 
-      // ---- Campos do formulário
-      const razao = (document.getElementById("razao")?.value || "").trim();
-      const resp = (document.getElementById("respLegal")?.value || "").trim();
-      const id = (document.getElementById("idPessoa")?.value || "").trim();
-      const cargo = (document.getElementById("cargo")?.value || "").trim();
-      const contato = (document.getElementById("contato")?.value || "").trim();
-      const militar = (document.getElementById("militar")?.value || "").trim();
+      // ---- Campos (valores em negrito)
+      const razao = (document.getElementById("razao").value || "").trim();
+      const resp = (document.getElementById("respLegal").value || "").trim();
+      const id = (document.getElementById("idPessoa").value || "").trim();
+      const cargo = (document.getElementById("cargo").value || "").trim();
+      const contato = (document.getElementById("contato").value || "").trim();
+      const militar = (document.getElementById("militar").value || "").trim();
 
       // ---- Datas
       const emissao = new Date();
@@ -486,7 +486,7 @@
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
 
-      // Template como dataURL (mais confiável)
+      // Fundo template (tamanho cheio)
       try {
         const imgData = await carregarTemplateComoDataURL(ALVARA_TEMPLATE_SRC);
         pdf.addImage(imgData, "PNG", 0, 0, pageW, pageH);
@@ -494,53 +494,41 @@
         console.warn("Falha ao carregar o template:", e);
       }
 
-      // ===== escrever linhas: label normal + valor em negrito =====
+      // ===== Escrever linhas (label normal + valor em negrito) =====
       pdf.setTextColor(0, 0, 0);
-
       const LBL_FONT = () => pdf.setFont("helvetica", "normal");
       const VAL_FONT = () => pdf.setFont("helvetica", "bold");
-      const FONT_SIZE = 12;          // ajuste de legibilidade
-      const VAL_FONT_SIZE = 12;
 
       const writeRow = (label, value, x, y) => {
-        LBL_FONT(); pdf.setFontSize(FONT_SIZE);
-        const lbl = `${label}: `;
-        pdf.text(lbl, x, y);
+        // label
+        LBL_FONT(); pdf.setFontSize(12);
+        pdf.text(`${label}: `, x, y);
 
-        const xVal = x + pdf.getTextWidth(lbl);
-        VAL_FONT(); pdf.setFontSize(VAL_FONT_SIZE);
-        pdf.text(value || "—", xVal, y);
+        // valor em negrito (logo na sequência do label)
+        const labelWidth = pdf.getTextWidth(`${label}: `);
+        VAL_FONT(); pdf.setFontSize(12);
+        pdf.text(value || "—", x + labelWidth, y);
       };
 
       let y = POS.yStart;
-      const X = POS.x;
+      writeRow("Razão social", razao, POS.x, y); y += POS.line;
+      writeRow("Data de emissão", fmtDataHora(emissao), POS.x, y); y += POS.line;
+      writeRow("Data de renovação", fmtData(renov), POS.x, y); y += POS.line;
+      writeRow("Responsável legal", resp, POS.x, y); y += POS.line;
+      writeRow("ID", id, POS.x, y); y += POS.line;
+      writeRow("Cargo", cargo, POS.x, y); y += POS.line;
+      writeRow("Contato", contato, POS.x, y); y += POS.line + 10;
 
-      writeRow("Razão social", razao, X, y); y += POS.line;
-      writeRow("Data de emissão", fmtDataHora(emissao), X, y); y += POS.line;
-      writeRow("Data de renovação", fmtData(renov), X, y); y += POS.line;
-      writeRow("Responsável legal", resp, X, y); y += POS.line;
-      writeRow("ID", id, X, y); y += POS.line;
-      writeRow("Cargo", cargo, X, y); y += POS.line;
-      writeRow("Contato", contato, X, y); y += POS.line;
-
-      // ===== assinatura (vermelho + “caligrafia”) =====
-      const sigX = POS.sigX ?? (pageW - 220); // ~coluna direita, centralizado no bloco da assinatura
-      const sigY = POS.sigY;
-
-      pdf.setTextColor(178, 34, 34);      // vermelho (firebrick)
-      pdf.setFont("times", "italic");     // “cursivo” básico; se quiser igual ao print, me envie a .ttf
+      // ===== Assinatura (vermelha, “estilo caneta”) =====
+      pdf.setTextColor(178, 34, 34);       // vermelho (tom próximo ao do exemplo)
+      pdf.setFont("times", "italic");      // estilo cursivo básico; posso embutir fonte .ttf se quiser igual
       pdf.setFontSize(26);
-      pdf.text(militar || "", sigX, sigY, { align: "center" });
+      pdf.text(militar || "", POS.sigX, POS.sigY, { align: "center" });
 
-      // DEBUG VISUAL (opcional): desenha guias para calibrar.
-      // descomente para ver linhas/caixas de referência:
-      /*
-      pdf.setDrawColor(255,0,0);
-      pdf.line(X, POS.yStart-14, X+380, POS.yStart-14); // linha guia acima do primeiro campo
-      pdf.rect(X-6, POS.yStart-20, 450, (7*POS.line)+28); // bloco dos textos
-      pdf.circle(sigX, sigY-6, 3, "S"); // marca a posição da assinatura
-      */
+      // volta cor preta pro resto, se precisar
+      pdf.setTextColor(0, 0, 0);
 
+      // salvar
       pdf.save(`alvara_${(razao || "empresa").replace(/\s+/g, "_")}.pdf`);
     }
 
