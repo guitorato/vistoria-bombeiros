@@ -2,276 +2,238 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Calculadora de Vistoria - Bombeiros</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Ícones opcionais -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
+    :root {
+      --vermelho: #b30000;
+      --vermelho-escuro: #7a0000;
+      --cinza-borda: #e0e0e0;
+      --cinza-claro: #f5f5f5;
+      --branco-card: rgba(255, 255, 255, 0.95);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #b30000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 300px;
+      font-family: Arial, Helvetica, sans-serif;
       background-image: url("fundo.png");
+      /* sua imagem de fundo */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .conteudo {
-      background-color: rgba(255, 255, 255, 0.95);
       width: 95%;
-      max-width: 1000px;
-      margin: 10px auto;
-      padding: 100px;
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      max-width: 1100px;
+      margin: 24px auto 40px;
+      background: var(--branco-card);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+      padding: 28px;
+      border: 1px solid rgba(0, 0, 0, .06);
     }
 
     h1 {
-      color: #b30000;
+      margin: 0 0 18px;
       text-align: center;
-      padding: 0 0 30px 0;
-      margin: 0;
-      font-size: 2.5em;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    }
-
-    .main-box {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      width: 100%;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
-      border: 1px solid #e0e0e0;
+      color: var(--vermelho);
     }
 
     .top-form {
-      margin-bottom: 25px;
-      display: flex;
-      gap: 30px;
-      align-items: flex-end;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 20px;
     }
 
-    .form-group {
-      flex: 1;
+    .form-group label {
+      font-weight: 600;
+      color: #222;
+      display: block;
+      margin-bottom: 6px;
     }
 
-    .form-group label h3 {
-      margin-bottom: 8px;
-      color: #333;
-    }
-
-    input[type="text"],
-    input[type="number"] {
+    .form-group input {
       width: 100%;
-      max-width: 300px;
-      padding: 10px;
-      margin-top: 4px;
+      padding: 10px 12px;
       border: 1px solid #ddd;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
-    }
-
-    .divider-horizontal {
-      border-top: 2px solid #eee;
-      margin: 25px 0;
+      background: #fff;
     }
 
     .content {
-      display: flex;
-      justify-content: space-between;
-      gap: 30px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 24px;
     }
 
-    .multa button {
-      background-color: #cc0000;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      width: 100%;
-      text-align: left;
-      font-size: 15px;
-      margin-bottom: 8px;
+    .card {
+      background: #fff;
+      border: 1px solid var(--cinza-borda);
+      border-radius: 12px;
+      padding: 18px;
     }
 
-    .multa button:hover:not(:disabled) {
-      background-color: #a30000;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    .multa button:active:not(:disabled) {
-      background-color: #7a0000;
-      transform: translateY(0);
-    }
-
-    .multa button:disabled {
-      background-color: #e0e0e0;
-      color: #999;
-      cursor: not-allowed;
-      transform: none !important;
-    }
-
-    .content>div {
-      flex: 1;
-    }
-
-    .extrato-box {
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      min-height: 200px;
-    }
-
-    .total {
-      font-weight: bold;
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 2px solid #eee;
-      font-size: 18px;
-      color: #b30000;
-    }
-
-    /* Estilos dos blocos com bordas */
-    .form {
-      border: 1px solid #ddd;
-      padding: 25px;
-      border-radius: 8px;
-      background-color: #fff;
-    }
-
-    .extrato {
-      border: 1px solid #ddd;
-      padding: 25px;
-      border-radius: 8px;
-      background-color: #fff;
-      height: fit-content;
-    }
-
-    .rodape {
-      color: white;
-      font-size: 14px;
-      position: fixed;
-      bottom: 15px;
-      right: 20px;
-      background-color: rgba(0,0,0,0.3);
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-
-    .limpar-btn {
-      background-color: #666;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: 100%;
-    }
-
-    .limpar-btn:hover {
-      background-color: #444;
-    }
-
-    .botoes-extrato {
+    .categorias {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .extrato-btn {
-      background-color: #cc0000;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-    }
-
-    .extrato-btn:hover {
-      background-color: #a30000;
-      transform: translateY(-2px);
+      gap: 18px;
     }
 
     .categoria {
-      font-weight: bold;
-      margin-top: 25px;
-      margin-bottom: 10px;
-      color: #b30000;
-      font-size: 18px;
-      padding-bottom: 5px;
-      border-bottom: 2px dashed #e0e0e0;
+      border: 1px dashed var(--cinza-borda);
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff;
     }
 
-    .divider-categoria {
-      border-top: 1px dashed #ddd;
-      margin: 15px 0;
+    .categoria h3 {
+      margin: 0 0 10px;
+      color: var(--vermelho);
+      font-size: 18px;
+    }
+
+    .multa {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--cinza-claro);
+      margin-bottom: 8px;
+    }
+
+    .multa .nome {
+      font-weight: 600;
+    }
+
+    .multa .valor {
+      font-weight: 600;
+      color: #333;
+      min-width: 130px;
+      text-align: right;
+    }
+
+    .multa .qty {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qty button {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 800;
+      background: var(--vermelho);
+      color: #fff;
+      transition: .2s;
+    }
+
+    .qty button:hover {
+      background: #a30000;
+    }
+
+    .qty input {
+      width: 48px;
+      text-align: center;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .extrato h2 {
+      margin: 0 0 12px;
+    }
+
+    .extrato-box {
+      background: #fff;
+      border: 1px solid var(--cinza-borda);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 160px;
     }
 
     .extrato-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      padding: 8px 12px;
-      background-color: #f5f5f5;
-      border-radius: 6px;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--cinza-claro);
+      margin-bottom: 8px;
     }
 
-    .extrato-item span {
-      flex-grow: 1;
+    .extrato-item .x {
+      font-weight: 700;
+      color: #444
     }
 
-    .remover-multa {
-      color: #cc0000;
-      cursor: pointer;
-      margin-left: 15px;
-      background: none;
-      border: none;
+    .total {
+      border-top: 2px solid #eee;
+      padding-top: 12px;
+      margin-top: 10px;
       font-size: 18px;
-      transition: transform 0.2s ease;
+      font-weight: 700;
+      color: var(--vermelho);
     }
 
-    .remover-multa:hover {
-      color: #a30000;
-      transform: scale(1.2);
+    .botoes {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
     }
 
-    @media (max-width: 1200px) {
+    .btn {
+      flex: 1;
+      background: var(--vermelho);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      background: #a30000;
+    }
+
+    .btn.sec {
+      background: #666;
+    }
+
+    .btn.sec:hover {
+      background: #444;
+    }
+
+    @media (max-width: 1000px) {
       .content {
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
-      
-      .conteudo {
-        padding: 30px;
-      }
-      
+
       .top-form {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-      }
-      
-      input[type="text"],
-      input[type="number"] {
-        max-width: 100%;
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -281,286 +243,290 @@
   <div class="conteudo">
     <h1>Calculadora de Vistoria - Bombeiros</h1>
 
-    <div class="main-box">
-      <div class="top-form">
-        <div class="form-group">
-          <label>
-            <h3>Nome da Instituição:</h3>
-          </label>
-          <input type="text" id="instituicao" placeholder="Ex: Hospital" oninput="atualizarExtrato()" />
-        </div>
-        <div class="form-group">
-          <label>
-            <h3>Inicial da Vistoria (R$):</h3>
-          </label>
-          <input type="text" id="valorInicial" value="0" oninput="formatarValorInput(this)" />
-        </div>
+    <!-- CAMPOS -->
+    <div class="top-form card">
+      <div class="form-group">
+        <label>Razão Social</label>
+        <input id="razao" type="text" placeholder="Ex.: Hospital Norte" oninput="atualizarExtrato()" />
+      </div>
+      <div class="form-group">
+        <label>Responsável Legal</label>
+        <input id="respLegal" type="text" placeholder="Ex.: Tony Zera" oninput="atualizarExtrato()" />
+      </div>
+      <div class="form-group">
+        <label>ID</label>
+        <input id="idPessoa" type="text" placeholder="Ex.: 108584" oninput="atualizarExtrato()" />
       </div>
 
-      <div class="divider-horizontal"></div>
+      <div class="form-group">
+        <label>Cargo</label>
+        <input id="cargo" type="text" placeholder="Ex.: Vice Diretor" oninput="atualizarExtrato()" />
+      </div>
+      <div class="form-group">
+        <label>Contato</label>
+        <input id="contato" type="text" placeholder="Ex.: 925-719" oninput="atualizarExtrato()" />
+      </div>
+      <div class="form-group">
+        <label>Militar Responsável</label>
+        <input id="militar" type="text" placeholder="Assinatura" oninput="atualizarExtrato()" />
+      </div>
 
-      <div class="content">
-        <div class="form">
-          <h2>Multas</h2>
+      <div class="form-group">
+        <label>Valor inicial da vistoria (R$)</label>
+        <input id="valorInicial" type="text" value="0,00" oninput="formatarMoeda(this); atualizarExtrato();" />
+      </div>
+    </div>
 
-          <div class="categoria">Saídas de Emergência</div>
-          <div class="multa"><button id="multa1"
-              onclick="adicionarMulta('Rotas de fuga desobstruídas', 40000, 'multa1')">+ Rotas de fuga desobstruídas (R$
-              40.000)</button></div>
-          <div class="multa"><button id="multa2" onclick="adicionarMulta('Rotas de fuga iluminadas', 40000, 'multa2')">+
-              Rotas de fuga iluminadas (R$ 40.000)</button></div>
-          <div class="multa"><button id="multa3" onclick="adicionarMulta('Piso íntegro e acessível', 10000, 'multa3')">+
-              Piso íntegro e acessível (R$ 10.000)</button></div>
-          <div class="multa"><button id="multa4"
-              onclick="adicionarMulta('Luminárias de emergência nas rotas', 40000, 'multa4')">+ Luminárias de emergência
-              nas rotas (R$ 40.000)</button></div>
+    <div class="content">
+      <!-- CATEGORIAS E MULTAS -->
+      <div class="card">
+        <h2 style="margin-top:0">Multas</h2>
+        <div id="categorias" class="categorias"></div>
+      </div>
 
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Escadas</div>
-          <div class="multa"><button id="multa5" onclick="adicionarMulta('Escadas desobstruídas', 50000, 'multa5')">+
-              Escadas desobstruídas (R$ 50.000)</button></div>
-          <div class="multa"><button id="multa6"
-              onclick="adicionarMulta('Placas e iluminação nas escadas', 40000, 'multa6')">+ Placas e iluminação nas
-              escadas (R$ 40.000)</button></div>
-          <div class="multa"><button id="multa7" onclick="adicionarMulta('Portas nas escadas', 40000, 'multa7')">+
-              Portas nas escadas (R$ 40.000)</button></div>
-
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Extintores</div>
-          <div class="multa"><button id="multa8" onclick="adicionarMulta('Extintores desobstruídos', 50000, 'multa8')">+
-              Extintores desobstruídos (R$ 50.000)</button></div>
-          <div class="multa"><button id="multa9" onclick="adicionarMulta('Extintores sinalizados', 50000, 'multa9')">+
-              Extintores sinalizados (R$ 50.000)</button></div>
-          <div class="multa"><button id="multa10"
-              onclick="adicionarMulta('Extintores em local apropriado', 50000, 'multa10')">+ Extintores em local
-              apropriado (R$ 50.000)</button></div>
-          <div class="multa"><button id="multa11"
-              onclick="adicionarMulta('Quantidade de extintores (4 ou mais)', 50000, 'multa11')">+ Quantidade de
-              extintores (4 ou mais) (R$ 50.000)</button></div>
-          <div class="multa"><button id="multa12"
-              onclick="adicionarMulta('Extintores com sinais de danos', 50000, 'multa12')">+ Extintores com sinais de
-              danos (R$ 50.000)</button></div>
-
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Sistema de Hidrantes</div>
-          <div class="multa"><button id="multa13"
-              onclick="adicionarMulta('Hidrantes desobstruídos e sinalizados', 20000, 'multa13')">+ Hidrantes
-              desobstruídos e sinalizados (R$ 20.000)</button></div>
-          <div class="multa"><button id="multa14"
-              onclick="adicionarMulta('Tubulações pintadas de vermelho', 20000, 'multa14')">+ Tubulações pintadas de
-              vermelho (R$ 20.000)</button></div>
-
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Sprinklers (Chuveiros Automáticos)</div>
-          <div class="multa"><button id="multa15"
-              onclick="adicionarMulta('Existência de sprinklers', 10000, 'multa15')">+ Existência de sprinklers (R$
-              10.000)</button></div>
-          <div class="multa"><button id="multa16"
-              onclick="adicionarMulta('Distância correta entre chuveiros e paredes', 10000, 'multa16')">+ Distância
-              correta entre chuveiros e paredes (R$ 10.000)</button></div>
-
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Iluminação e Sinalização</div>
-          <div class="multa"><button id="multa17"
-              onclick="adicionarMulta('Iluminação de emergência funcionando', 10000, 'multa17')">+ Iluminação de
-              emergência funcionando (R$ 10.000)</button></div>
-          <div class="multa"><button id="multa18"
-              onclick="adicionarMulta('Sinalização de emergência visível', 10000, 'multa18')">+ Sinalização de
-              emergência visível (R$ 10.000)</button></div>
-
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Acessibilidade</div>
-          <div class="multa"><button id="multa19"
-              onclick="adicionarMulta('Rampas para cadeirantes', 30000, 'multa19')">+ Rampas para cadeirantes (R$
-              30.000)</button></div>
-          <div class="multa"><button id="multa20"
-              onclick="adicionarMulta('Portas e corredores largos para cadeirantes', 30000, 'multa20')">+ Portas e
-              corredores largos para cadeirantes (R$ 30.000)</button></div>
-
-          <div class="divider-categoria"></div>
-
-          <div class="categoria">Outros Itens</div>
-          <div class="multa"><button id="multa21"
-              onclick="adicionarMulta('Material inflamável perto das saídas', 50000, 'multa21')">+ Material inflamável
-              perto das saídas (R$ 50.000)</button></div>
-          <div class="multa"><button id="multa22" onclick="adicionarMulta('Cabos ou fios expostos', 50000, 'multa22')">+
-              Cabos ou fios expostos (R$ 50.000)</button></div>
-
-          <br>
-          <button class="limpar-btn" onclick="limparTudo()">Limpar Tudo</button>
-        </div> <!-- fecha .form -->
-
-        <div class="extrato">
-          <div>
-            <h2>Extrato</h2>
-            <div class="extrato-box" id="extrato">
-              Nenhuma vistoria registrada.
-            </div>
-            <div class="botoes-extrato">
-              <button class="extrato-btn" onclick="limparTudo()">Limpar</button>
-              <!-- <button class="extrato-btn" onclick="baixarExtrato()">Extrair Extrato</button> -->
-            </div>
-          </div>
+      <!-- EXTRATO -->
+      <div class="card extrato">
+        <h2>Extrato</h2>
+        <div id="extrato" class="extrato-box">Nenhuma vistoria registrada.</div>
+        <div class="botoes">
+          <button class="btn sec" onclick="limparTudo()">Limpar</button>
+          <button class="btn" onclick="gerarAlvara()">Gerar Alvará (PDF)</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- libs para PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
-    let multas = [];
+    /*********** CONFIG ***********/
+    const ALVARA_TEMPLATE_SRC = "imagens/alvara_template.png"; // coloque sua imagem do modelo aqui
 
-    function formatar(valor) {
-      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    // Multas por categoria – adicione/edite aqui facilmente
+    const MULTAS = {
+      "Saídas de Emergência": [
+        { nome: "Rotas de fuga desobstruídas", valor: 40000 },
+        { nome: "Rotas de fuga iluminadas", valor: 40000 },
+        { nome: "Piso íntegro e acessível", valor: 10000 },
+        { nome: "Luminárias de emergência nas rotas", valor: 40000 },
+      ],
+      "Escadas": [
+        { nome: "Escadas desobstruídas", valor: 50000 },
+        { nome: "Placas e iluminação nas escadas", valor: 40000 },
+        { nome: "Portas nas escadas", valor: 40000 },
+      ],
+      "Extintores": [
+        { nome: "Extintores desobstruídos", valor: 50000 },
+        { nome: "Extintores sinalizados", valor: 50000 },
+        { nome: "Extintores em local apropriado", valor: 50000 },
+        { nome: "Quantidade de extintores (4 ou mais)", valor: 50000 },
+        { nome: "Extintores com sinais de danos", valor: 50000 },
+      ],
+      "Sistema de Hidrantes": [
+        { nome: "Hidrantes desobstruídos e sinalizados", valor: 20000 },
+        { nome: "Tubulações pintadas de vermelho", valor: 20000 },
+      ],
+      "Sprinklers (Chuveiros Automáticos)": [
+        { nome: "Existência de sprinklers", valor: 10000 },
+        { nome: "Distância correta entre chuveiros e paredes", valor: 10000 },
+      ],
+      "Iluminação e Sinalização": [
+        { nome: "Iluminação de emergência funcionando", valor: 10000 },
+        { nome: "Sinalização de emergência visível", valor: 10000 },
+      ],
+      "Acessibilidade": [
+        { nome: "Rampas para cadeirantes", valor: 30000 },
+        { nome: "Portas e corredores largos para cadeirantes", valor: 30000 },
+      ],
+      "Outros Itens": [
+        { nome: "Material inflamável perto das saídas", valor: 50000 },
+        { nome: "Cabos ou fios expostos", valor: 50000 },
+      ]
+    };
+
+    // Estado das quantidades
+    const qtd = {}; // chave = nome da multa -> quantidade
+
+    /*********** HELPERS ***********/
+    const fmtBRL = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    function parseBRL(str) {
+      if (!str) return 0;
+      const limpo = str.replace(/\./g, "").replace(",", ".").replace(/[^0-9.]/g, "");
+      const num = parseFloat(limpo);
+      return isNaN(num) ? 0 : num;
+    }
+    function formatarMoeda(input) {
+      let v = input.value.replace(/[^\d]/g, "");
+      if (v === "") { input.value = "0,00"; return; }
+      v = (parseInt(v, 10) / 100).toFixed(2).replace(".", ",");
+      input.value = v.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    function parseValor(valorStr) {
-      const limpo = valorStr.replace(/[^0-9]/g, '');
-      return parseFloat(limpo) / 100 || 0;
-    }
-
-    function formatarValorInput(input) {
-      // Salva a posição do cursor
-      const startPos = input.selectionStart;
-      const endPos = input.selectionEnd;
-
-      // Obtém o valor atual sem formatação
-      const valor = input.value.replace(/[^0-9]/g, '');
-
-      // Formata o valor
-      let valorFormatado = '';
-      if (valor.length > 0) {
-        const valorNumerico = parseFloat(valor) / 100;
-        valorFormatado = valorNumerico.toLocaleString('pt-BR', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
+    /*********** RENDER ***********/
+    function montarCategorias() {
+      const wrap = document.getElementById("categorias");
+      wrap.innerHTML = "";
+      Object.entries(MULTAS).forEach(([cat, itens]) => {
+        const box = document.createElement("div");
+        box.className = "categoria";
+        box.innerHTML = `<h3>${cat}</h3>`;
+        itens.forEach(item => {
+          if (!(item.nome in qtd)) qtd[item.nome] = 0;
+          const linha = document.createElement("div");
+          linha.className = "multa";
+          linha.innerHTML = `
+            <div class="nome">${item.nome}</div>
+            <div class="valor">${fmtBRL(item.valor)}</div>
+            <div class="qty">
+              <button type="button" aria-label="diminuir" onclick="alterarQtd('${item.nome}', -1)">−</button>
+              <input type="text" value="${qtd[item.nome]}" readonly />
+              <button type="button" aria-label="aumentar" onclick="alterarQtd('${item.nome}', 1)">+</button>
+            </div>
+          `;
+          box.appendChild(linha);
         });
-      }
-
-      // Atualiza o campo com o valor formatado
-      input.value = valorFormatado;
-
-      // Restaura a posição do cursor, ajustando para a formatação
-      const diff = valorFormatado.length - input.value.length;
-      input.setSelectionRange(startPos + diff, endPos + diff);
-
-      // Atualiza o extrato
-      atualizarExtrato();
-    }
-
-    function adicionarMulta(nome, valor, botaoId) {
-      // Verifica se a multa já foi adicionada
-      const jaExiste = multas.some(m => m.nome === nome);
-      if (jaExiste) return;
-
-      // Adiciona a multa
-      multas.push({
-        nome,
-        valor,
-        botaoId // Armazena o ID do botão para poder reativá-lo depois
+        wrap.appendChild(box);
       });
+    }
 
-      // Desabilita o botão
-      document.getElementById(botaoId).disabled = true;
-
+    function alterarQtd(nome, delta) {
+      const novo = Math.max(0, (qtd[nome] || 0) + delta);
+      qtd[nome] = novo;
+      montarCategorias();
       atualizarExtrato();
     }
 
-    function removerMulta(index, botaoId) {
-      // Remove a multa do array
-      multas.splice(index, 1);
-      
-      // Reativa o botão correspondente
-      if (botaoId) {
-        document.getElementById(botaoId).disabled = false;
-      }
-      
-      atualizarExtrato();
-    }
-
-    function limparTudo() {
-      // Reativa todos os botões antes de limpar
-      multas.forEach(m => {
-        if (m.botaoId) {
-          document.getElementById(m.botaoId).disabled = false;
-        }
-      });
-      
-      multas = [];
-      document.getElementById('valorInicial').value = '0';
-      document.getElementById('instituicao').value = '';
-      atualizarExtrato();
-    }
-
+    /*********** EXTRATO ***********/
     function atualizarExtrato() {
-      const extrato = document.getElementById('extrato');
-      const nome = document.getElementById('instituicao').value;
-      const valorInicialStr = document.getElementById('valorInicial').value;
-      const valorInicial = parseValor(valorInicialStr);
+      const extrato = document.getElementById("extrato");
+      const valorInicial = parseBRL(document.getElementById("valorInicial").value);
+      const razao = document.getElementById("razao").value.trim();
 
-      if (multas.length === 0 && !nome && valorInicial === 0) {
-        extrato.innerHTML = 'Nenhuma vistoria registrada.';
+      // montando lista de itens selecionados
+      const linhas = [];
+      let total = valorInicial;
+
+      Object.entries(MULTAS).forEach(([cat, itens]) => {
+        itens.forEach(item => {
+          const q = qtd[item.nome] || 0;
+          if (q > 0) {
+            const sub = q * item.valor;
+            total += sub;
+            linhas.push({ nome: item.nome, q, unit: item.valor, sub });
+          }
+        });
+      });
+
+      if (linhas.length === 0 && !razao && valorInicial === 0) {
+        extrato.innerHTML = "Nenhuma vistoria registrada.";
         return;
       }
 
-      let html = `<div><strong>Instituição:</strong> ${nome || 'N/D'}</div>`;
-      html += `<div><strong>Valor inicial:</strong> ${formatar(valorInicial)}</div><br>`;
-      
-      let total = valorInicial;
-      multas.forEach((m, index) => {
+      let html = `
+        <div><strong>Razão Social:</strong> ${razao || "N/D"}</div>
+        <div><strong>Valor inicial:</strong> ${fmtBRL(valorInicial)}</div>
+        <br/>
+      `;
+
+      linhas.forEach(l => {
         html += `
           <div class="extrato-item">
-            <span>+ ${m.nome}: ${formatar(m.valor)}</span>
-            <button class="remover-multa" onclick="removerMulta(${index}, '${m.botaoId}')">
-              <i class="fas fa-trash"></i>
-            </button>
+            <span><span class="x">${l.q}×</span> ${l.nome}</span>
+            <span>${fmtBRL(l.unit)} → <strong>${fmtBRL(l.sub)}</strong></span>
           </div>
         `;
-        total += m.valor;
       });
-      
-      html += `<div class="total"><strong>Total Final:</strong> ${formatar(total)}</div>`;
+
+      html += `<div class="total"><strong>Total Final:</strong> ${fmtBRL(total)}</div>`;
       extrato.innerHTML = html;
     }
 
-    window.onload = () => {
+    function limparTudo() {
+      Object.keys(qtd).forEach(k => qtd[k] = 0);
+      document.getElementById("razao").value = "";
+      document.getElementById("respLegal").value = "";
+      document.getElementById("idPessoa").value = "";
+      document.getElementById("cargo").value = "";
+      document.getElementById("contato").value = "";
+      document.getElementById("militar").value = "";
+      document.getElementById("valorInicial").value = "0,00";
+      montarCategorias();
       atualizarExtrato();
     }
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>
-    function baixarExtrato() {
-      const extrato = document.querySelector('.extrato');
-      const limparBtn = extrato.querySelector('.limpar-btn');
-      const extrairBtn = extrato.querySelector('.extrair-btn');
 
-      // Esconde os botões
-      limparBtn.style.display = 'none';
-      extrairBtn.style.display = 'none';
+    /*********** PDF ALVARÁ ***********/
+    async function gerarAlvara() {
+      const { jsPDF } = window.jspdf;
 
-      // Aguarda um pequeno delay para garantir o reflow
-      setTimeout(() => {
-        html2canvas(extrato).then(canvas => {
-          // Restaura os botões
-          limparBtn.style.display = 'inline-block';
-          extrairBtn.style.display = 'inline-block';
+      // ---- Campos
+      const razao = (document.getElementById("razao").value || "").trim();
+      const resp = (document.getElementById("respLegal").value || "").trim();
+      const id = (document.getElementById("idPessoa").value || "").trim();
+      const cargo = (document.getElementById("cargo").value || "").trim();
+      const contato = (document.getElementById("contato").value || "").trim();
+      const militar = (document.getElementById("militar").value || "").trim();
 
-          const link = document.createElement('a');
-          link.download = 'extrato_vistoria.png';
-          link.href = canvas.toDataURL();
-          link.click();
-        });
-      }, 100);
+      // ---- Datas
+      const emissao = new Date();
+      const renov = new Date(emissao); renov.setDate(emissao.getDate() + 30);
+      const fmtDataHora = d => d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+      const fmtData = d => d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+
+      // ---- PDF
+      const pdf = new jsPDF({ unit: "pt", format: "a4" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+
+      // Tenta carregar template como dataURL (mais compatível)
+      try {
+        const imgData = await carregarTemplateComoDataURL(ALVARA_TEMPLATE_SRC);
+        if (imgData) {
+          pdf.addImage(imgData, "PNG", 0, 0, pageW, pageH);  // cobre a página toda
+        }
+      } catch (e) {
+        console.warn("Falha ao carregar o template do alvará:", e);
+      }
+
+      // ---- Texto (ajuste fino de posições aqui)
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+
+      const X = 60;   // margem esquerda
+      let y = 420;  // logo abaixo da linha vermelha do seu modelo
+
+      pdf.text(`Razão social: ${razao}`, X, y); y += 22;
+      pdf.text(`Data de emissão: ${fmtDataHora(emissao)}`, X, y); y += 22;
+      pdf.text(`Data de renovação: ${fmtData(renov)}`, X, y); y += 22;
+      pdf.text(`Responsável legal: ${resp}`, X, y); y += 22;
+      pdf.text(`ID: ${id}`, X, y); y += 22;
+      pdf.text(`Cargo: ${cargo}`, X, y); y += 22;
+      pdf.text(`Contato: ${contato}`, X, y); y += 40;
+
+      // Assinatura (parte de baixo à direita)
+      pdf.setFontSize(14);
+      pdf.text(militar || "", pageW - 220, pageH - 75, { align: "center" });
+
+      pdf.save(`alvara_${(razao || "empresa").replace(/\\s+/g, "_")}.pdf`);
     }
+
+    // Usa fetch → blob → dataURL (evita problemas de CORS/Imagem)
+    async function carregarTemplateComoDataURL(src) {
+      const res = await fetch(src);
+      if (!res.ok) throw new Error(`HTTP ${res.status} ao carregar ${src}`);
+      const blob = await res.blob();
+      return await new Promise((resolve) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.readAsDataURL(blob);
+      });
+    }
+
+    /*********** INIT ***********/
+    montarCategorias();
+    atualizarExtrato();
   </script>
 </body>
-<footer class="rodape">
-  © 2025 Bombeiros Cidade Universo — Criado por Guilherme R⚡
-</footer>
 
 </html>
