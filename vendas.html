@@ -1,281 +1,307 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Calculadora de Venda de Medicamentos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-image: url("fundo.png");
-            background-size: cover;
-            background-position: center -10px;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            color: #fff;
-        }
+  <meta charset="UTF-8">
+  <title>Calculadora de Venda de Medicamentos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --overlay: rgba(0,0,0,0.6);
+      --overlay-soft: rgba(0,0,0,0.5);
+      --overlay-card: rgba(0,0,0,0.6);
+      --radius: 12px;
+      --gap: 16px;
+      --red: #f70707;
+      --red-dark: #3a0101;
+      --text: #fff;
+    }
 
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
+    *{ box-sizing: border-box; }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            padding: 10px;
-            gap: 20px;
-            flex: 1;
-        }
+    html, body{
+      height:100%;
+      margin:0;
+    }
 
-        h1 {
-            text-align: center;
-            margin: 10px 0;
-            font-size: 26px;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 8px 20px;
-            border-radius: 10px;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background-image: url("fundo.png");
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
 
-        .topo {
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 20px;
-            padding: 15px;
-            text-align: left;
-            width: 40%;
-            min-width: 280px;
-        }
+    .container{
+      width: min(1100px, 94%);
+      margin: 20px auto 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 20px;
+      flex:1;
+    }
 
-        .topo label {
-            display: block;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+    h1{
+      text-align:center;
+      margin: 0;
+      font-size: clamp(20px, 3.5vw, 28px);
+      background-color: var(--overlay);
+      padding: 10px 18px;
+      border-radius: var(--radius);
+    }
 
-        .topo input {
-            width: 30%;
-            padding: 6px;
-            font-size: 14px;
-        }
+    /* Card topo (dados principais) */
+    .topo{
+      background-color: var(--overlay-soft);
+      border-radius: var(--radius);
+      padding: 16px;
+      width: 100%;
+    }
 
-        .conteudo {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-        }
+    .topo label{
+      display:block;
+      font-weight:700;
+      margin-top: 10px;
+      font-size: clamp(14px, 2.5vw, 16px);
+    }
 
-        .medicamentos,
-        .extrato {
-            background-color: rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            padding: 15px;
-            flex: 1;
-            min-width: 300px;
-            max-width: 400px;
-        }
+    .topo input{
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      outline: none;
+    }
 
-        .linha-medicamento {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
+    .botoes{
+      display:flex;
+      gap: 12px;
+      justify-content: flex-start;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
 
-        .linha-medicamento input[type="number"] {
-            padding: 5px;
-            font-size: 14px;
-        }
+    button{
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--red);
+      color: white;
+      min-width: 180px;
+      transition: background-color .2s ease, transform .05s ease;
+      touch-action: manipulation;
+    }
+    button:hover{ background-color: var(--red-dark); }
+    button:active{ transform: translateY(1px); }
 
-        .linha-medicamento input[placeholder="Qtd"] {
-            width: 60px;
-        }
+    /* Conteúdo principal: medicamentos + extrato */
+    .conteudo{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+    }
 
-        .linha-medicamento input[placeholder="Valor"] {
-            width: 100px;
-        }
+    .medicamentos, .extrato{
+      background-color: var(--overlay-card);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-width: 0;
+    }
 
-        .botoes {
-            display: flex;
-            gap: 230px;
-            justify-content: left;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
+    .medicamentos h3, .extrato h2{
+      margin: 0 0 12px;
+      font-size: clamp(18px, 3vw, 22px);
+    }
 
-        button {
-            padding: 6px 10px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #f70707;
-            color: white;
-        }
+    /* Linha de medicamento em grid (nome / qtd / valor) */
+    .linhas{
+      display: grid;
+      gap: 10px;
+    }
 
-        button:hover {
-            background-color: #3a0101;
-        }
+    .linha-medicamento{
+      display: grid;
+      grid-template-columns: 1fr 90px 120px;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.08);
+      padding: 10px;
+      border-radius: 10px;
+    }
 
-        .extrato h2 {
-            margin-top: 0;
-        }
+    .linha-medicamento label{
+      font-weight: 700;
+    }
 
-        .extrato p {
-            margin: 5px 0;
-        }
+    .linha-medicamento input[type="number"]{
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      color:#fff;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    /* remove setinhas do number no Chrome/Safari */
+    .linha-medicamento input[type=number]::-webkit-outer-spin-button,
+    .linha-medicamento input[type=number]::-webkit-inner-spin-button{
+      -webkit-appearance: none; margin:0;
+    }
 
-        .rodape {
-            color: white;
-            font-size: 12px;
-            background-color: rgba(0, 0, 0, 0.3);
-            padding: 5px 10px;
-            border-radius: 5px;
-            text-align: right;
-            margin-top: 10px;
-        }
+    .extrato p{ margin: 6px 0; }
+    .extrato hr{ border: none; border-top: 1px solid rgba(255,255,255,0.25); margin: 10px 0; }
 
-        @media (max-width: 768px) {
-            .titulo-principal {
-                text-align: center;
-                font-size: 22px;
-            }
+    .rodape{
+      color: white;
+      font-size: 12px;
+      background-color: rgba(0,0,0,0.35);
+      padding: 6px 10px;
+      border-radius: 6px;
+      text-align: right;
+      width: min(1100px, 94%);
+      margin: 10px auto 16px;
+    }
 
-            .topo input {
-                width: 90%;
-            }
+    /* ===== Responsivo ===== */
+    @media (max-width: 1024px){
+      .conteudo{ grid-template-columns: 1fr; }
+    }
 
-            .conteudo {
-                flex-direction: column;
-                gap: 20px;
-                align-items: stretch;
-            }
+    @media (max-width: 640px){
+      .linha-medicamento{
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "nome nome"
+          "qtd valor";
+      }
+      .linha-medicamento label{ grid-area: nome; }
+      .linha-medicamento input[placeholder="Qtd"]{ grid-area: qtd; }
+      .linha-medicamento input[placeholder="Valor"]{ grid-area: valor; }
 
-            .medicamentos,
-            .extrato {
-                width: 100%;
-                max-width: none;
-            }
-        }
-    </style>
+      .botoes{ flex-direction: column; }
+      button{ width: 100%; min-width: 0; }
+    }
+  </style>
 </head>
-
 <body>
 
-    <div class="container">
+  <div class="container">
 
-        <h1>Calculadora de Venda de Medicamentos</h1>
+    <h1>Calculadora de Venda de Medicamentos</h1>
 
-        <div class="topo">
-            <label>Nome da FAC/ORG:</label>
-            <input type="text" id="fac" oninput="atualizarExtrato()">
+    <div class="topo">
+      <label for="fac">Nome da FAC/ORG:</label>
+      <input type="text" id="fac" oninput="atualizarExtrato()" placeholder="Ex.: Hospital Norte" />
 
-            <label>Nome do Cliente:</label>
-            <input type="text" id="cliente" oninput="atualizarExtrato()">
+      <label for="cliente">Nome do Cliente:</label>
+      <input type="text" id="cliente" oninput="atualizarExtrato()" placeholder="Ex.: João Silva" />
 
-            <label>Passaporte do Cliente:</label>
-            <input type="text" id="passaporte" oninput="atualizarExtrato()">
+      <label for="passaporte">Passaporte do Cliente:</label>
+      <input type="text" id="passaporte" oninput="atualizarExtrato()" placeholder="Ex.: 123456" />
 
-            <div class="botoes">
-                <button onclick="limparPrincipais()">Limpar Informações Principais</button>
-                <button onclick="limparExtrato()">Limpar Extrato</button>
-            </div>
-        </div>
-
-        <div class="conteudo">
-            <div class="medicamentos">
-                <h3>Medicamentos</h3>
-                <div class="linha-medicamento">
-                    <label>Adrenalina:</label>
-                    <input type="number" placeholder="Qtd" id="qtd_adrenalina" oninput="atualizarExtrato()">
-                    <input type="number" placeholder="Valor" id="val_adrenalina" oninput="atualizarExtrato()">
-                </div>
-                <div class="linha-medicamento">
-                    <label>Kit Médico:</label>
-                    <input type="number" placeholder="Qtd" id="qtd_kit" oninput="atualizarExtrato()">
-                    <input type="number" placeholder="Valor" id="val_kit" oninput="atualizarExtrato()">
-                </div>
-                <div class="linha-medicamento">
-                    <label>Bandagem:</label>
-                    <input type="number" placeholder="Qtd" id="qtd_bandagem" oninput="atualizarExtrato()">
-                    <input type="number" placeholder="Valor" id="val_bandagem" oninput="atualizarExtrato()">
-                </div>
-            </div>
-
-            <div class="extrato" id="extrato">
-                <h2>Extrato</h2>
-                <p><strong>FAC/ORG:</strong> <span id="out_fac"></span></p>
-                <p><strong>Cliente:</strong> <span id="out_cliente"></span></p>
-                <p><strong>Passaporte:</strong> <span id="out_passaporte"></span></p>
-                <hr>
-                <div id="medicamentos_resumo"></div>
-                <hr>
-                <p><strong>Valor Total:</strong> R$ <span id="total"></span></p>
-                <p><strong>Depósito (50%):</strong> R$ <span id="deposito"></span></p>
-            </div>
-        </div>
-
+      <div class="botoes">
+        <button onclick="limparPrincipais()">Limpar Informações Principais</button>
+        <button onclick="limparExtrato()">Limpar Extrato</button>
+      </div>
     </div>
 
-    <script>
-        const formatarBRL = (valor) => {
-            return valor.toLocaleString('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        };
+    <div class="conteudo">
+      <div class="medicamentos">
+        <h3>Medicamentos</h3>
+        <div class="linhas">
+          <div class="linha-medicamento">
+            <label>Adrenalina</label>
+            <input type="number" placeholder="Qtd" id="qtd_adrenalina" oninput="atualizarExtrato()" min="0" inputmode="numeric" />
+            <input type="number" placeholder="Valor" id="val_adrenalina" oninput="atualizarExtrato()" min="0" step="0.01" inputmode="decimal" />
+          </div>
 
-        function atualizarExtrato() {
-            document.getElementById("out_fac").textContent = document.getElementById("fac").value;
-            document.getElementById("out_cliente").textContent = document.getElementById("cliente").value;
-            document.getElementById("out_passaporte").textContent = document.getElementById("passaporte").value;
+          <div class="linha-medicamento">
+            <label>Kit Médico</label>
+            <input type="number" placeholder="Qtd" id="qtd_kit" oninput="atualizarExtrato()" min="0" inputmode="numeric" />
+            <input type="number" placeholder="Valor" id="val_kit" oninput="atualizarExtrato()" min="0" step="0.01" inputmode="decimal" />
+          </div>
 
-            const medicamentos = [
-                { nome: 'Adrenalina', qtd: +document.getElementById("qtd_adrenalina").value || 0, val: +document.getElementById("val_adrenalina").value || 0 },
-                { nome: 'Kit Médico', qtd: +document.getElementById("qtd_kit").value || 0, val: +document.getElementById("val_kit").value || 0 },
-                { nome: 'Bandagem', qtd: +document.getElementById("qtd_bandagem").value || 0, val: +document.getElementById("val_bandagem").value || 0 },
-            ];
+          <div class="linha-medicamento">
+            <label>Bandagem</label>
+            <input type="number" placeholder="Qtd" id="qtd_bandagem" oninput="atualizarExtrato()" min="0" inputmode="numeric" />
+            <input type="number" placeholder="Valor" id="val_bandagem" oninput="atualizarExtrato()" min="0" step="0.01" inputmode="decimal" />
+          </div>
+        </div>
+      </div>
 
-            let total = 0;
-            let resumoHTML = '';
+      <div class="extrato" id="extrato">
+        <h2>Extrato</h2>
+        <p><strong>FAC/ORG:</strong> <span id="out_fac"></span></p>
+        <p><strong>Cliente:</strong> <span id="out_cliente"></span></p>
+        <p><strong>Passaporte:</strong> <span id="out_passaporte"></span></p>
+        <hr>
+        <div id="medicamentos_resumo"></div>
+        <hr>
+        <p><strong>Valor Total:</strong> R$ <span id="total"></span></p>
+        <p><strong>Depósito (50%):</strong> R$ <span id="deposito"></span></p>
+      </div>
+    </div>
+  </div>
 
-            medicamentos.forEach(med => {
-                if (med.qtd > 0 && med.val > 0) {
-                    const subtotal = med.qtd * med.val;
-                    total += subtotal;
-                    resumoHTML += `<p>${med.nome} - Qtd: ${med.qtd} x R$${formatarBRL(med.val)} = R$${formatarBRL(subtotal)}</p>`;
-                }
-            });
+  <script>
+    const formatarBRL = (valor) =>
+      valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById("medicamentos_resumo").innerHTML = resumoHTML || "<p>Nenhum medicamento preenchido.</p>";
-            document.getElementById("total").textContent = formatarBRL(total);
-            document.getElementById("deposito").textContent = formatarBRL(total / 2);
+    function atualizarExtrato() {
+      document.getElementById("out_fac").textContent = document.getElementById("fac").value;
+      document.getElementById("out_cliente").textContent = document.getElementById("cliente").value;
+      document.getElementById("out_passaporte").textContent = document.getElementById("passaporte").value;
+
+      const medicamentos = [
+        { nome: 'Adrenalina', qtd: +document.getElementById("qtd_adrenalina").value || 0, val: +document.getElementById("val_adrenalina").value || 0 },
+        { nome: 'Kit Médico', qtd: +document.getElementById("qtd_kit").value || 0, val: +document.getElementById("val_kit").value || 0 },
+        { nome: 'Bandagem',  qtd: +document.getElementById("qtd_bandagem").value  || 0, val: +document.getElementById("val_bandagem").value  || 0 },
+      ];
+
+      let total = 0;
+      let resumoHTML = '';
+
+      medicamentos.forEach(med => {
+        if (med.qtd > 0 && med.val > 0) {
+          const subtotal = med.qtd * med.val;
+          total += subtotal;
+          resumoHTML += `<p>${med.nome} — Qtd: ${med.qtd} × R$${formatarBRL(med.val)} = <strong>R$${formatarBRL(subtotal)}</strong></p>`;
         }
+      });
 
-        function limparPrincipais() {
-            document.getElementById("fac").value = '';
-            document.getElementById("cliente").value = '';
-            document.getElementById("passaporte").value = '';
-            atualizarExtrato();
-        }
+      document.getElementById("medicamentos_resumo").innerHTML = resumoHTML || "<p>Nenhum medicamento preenchido.</p>";
+      document.getElementById("total").textContent = formatarBRL(total);
+      document.getElementById("deposito").textContent = formatarBRL(total / 2);
+    }
 
-        function limparExtrato() {
-            ["qtd_adrenalina", "val_adrenalina", "qtd_kit", "val_kit", "qtd_bandagem", "val_bandagem"].forEach(id => {
-                document.getElementById(id).value = '';
-            });
-            atualizarExtrato();
-        }
-    </script>
-    <footer class="rodape">
-        © 2025 Bombeiros Cidade Universo — Criado por Guilherme R⚡
-    </footer>
+    function limparPrincipais() {
+      document.getElementById("fac").value = '';
+      document.getElementById("cliente").value = '';
+      document.getElementById("passaporte").value = '';
+      atualizarExtrato();
+    }
+
+    function limparExtrato() {
+      ["qtd_adrenalina","val_adrenalina","qtd_kit","val_kit","qtd_bandagem","val_bandagem"].forEach(id=>{
+        document.getElementById(id).value = '';
+      });
+      atualizarExtrato();
+    }
+  </script>
+
+  <footer class="rodape">
+    © 2025 Bombeiros Cidade Universo — Criado por Guilherme R⚡
+  </footer>
 </body>
-
 </html>
