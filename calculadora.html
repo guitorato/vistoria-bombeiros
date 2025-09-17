@@ -17,15 +17,12 @@
       --branco-card: rgba(255, 255, 255, 0.95);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background-image: url("fundo.png");
-      /* sua imagem de fundo */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -107,11 +104,27 @@
       font-size: 18px;
     }
 
+    /* Cabeçalho de gravidades */
+    .grav-header {
+      display: grid;
+      grid-template-columns: 1fr repeat(4, 1fr);
+      gap: 8px;
+      font-weight: 700;
+      background: #fafafa;
+      border: 1px solid var(--cinza-borda);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+    }
+    .grav-header div { text-align: center; }
+    .grav-header .nome-col { text-align: left; }
+
+    /* Linha de item com 4 colunas de gravidade */
     .multa {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr repeat(4, 1fr);
+      gap: 8px;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
       padding: 10px 12px;
       border-radius: 8px;
       background: var(--cinza-claro);
@@ -122,22 +135,30 @@
       font-weight: 600;
     }
 
-    .multa .valor {
-      font-weight: 600;
-      color: #333;
-      min-width: 130px;
-      text-align: right;
+    .nivel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
-    .multa .qty {
+    .nivel .price {
+      font-size: 12px;
+      opacity: .85;
+      display: block;
+      line-height: 1;
+    }
+
+    .qty {
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
     .qty button {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
@@ -147,12 +168,10 @@
       transition: .2s;
     }
 
-    .qty button:hover {
-      background: #a30000;
-    }
+    .qty button:hover { background: #a30000; }
 
     .qty input {
-      width: 48px;
+      width: 40px;
       text-align: center;
       padding: 6px 8px;
       border: 1px solid #ccc;
@@ -160,9 +179,7 @@
       background: #fff;
     }
 
-    .extrato h2 {
-      margin: 0 0 12px;
-    }
+    .extrato h2 { margin: 0 0 12px; }
 
     .extrato-box {
       background: #fff;
@@ -183,10 +200,7 @@
       margin-bottom: 8px;
     }
 
-    .extrato-item .x {
-      font-weight: 700;
-      color: #444
-    }
+    .extrato-item .x { font-weight: 700; color: #444 }
 
     .total {
       border-top: 2px solid #eee;
@@ -215,26 +229,23 @@
       transition: .2s;
     }
 
-    .btn:hover {
-      background: #a30000;
-    }
+    .btn:hover { background: #a30000; }
 
-    .btn.sec {
-      background: #666;
-    }
-
-    .btn.sec:hover {
-      background: #444;
-    }
+    .btn.sec { background: #666; }
+    .btn.sec:hover { background: #444; }
 
     @media (max-width: 1000px) {
-      .content {
-        grid-template-columns: 1fr;
+      .content { grid-template-columns: 1fr; }
+      .top-form { grid-template-columns: 1fr; }
+      .grav-header {
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 6px;
       }
-
-      .top-form {
-        grid-template-columns: 1fr;
+      .grav-header .g-col-3, .grav-header .g-col-4 { display: none; }
+      .multa {
+        grid-template-columns: 1fr 1fr 1fr;
       }
+      .multa .g-3, .multa .g-4 { display: none; }
     }
   </style>
 </head>
@@ -281,6 +292,13 @@
       <!-- CATEGORIAS E MULTAS -->
       <div class="card">
         <h2 style="margin-top:0">Multas</h2>
+        <div style="font-size:14px;margin-bottom:8px;opacity:.9">
+          <strong>Valores por nível:</strong>
+          Baixo = R$ 500.000,00 &nbsp;|&nbsp;
+          Médio = R$ 750.000,00 &nbsp;|&nbsp;
+          Alto = R$ 1.000.000,00 &nbsp;|&nbsp;
+          Gravíssimo = R$ 1.500.000,00
+        </div>
         <div id="categorias" class="categorias"></div>
       </div>
 
@@ -303,72 +321,87 @@
     /*********** CONFIG ***********/
     const ALVARA_TEMPLATE_SRC = "imagens/alvara_template.png"; // coloque sua imagem do modelo aqui
 
-    // Multas por categoria – adicione/edite aqui facilmente
+    // Definição de níveis (ordem importa)
+    const LEVELS = [
+      { id: 'b', label: 'Baixo', short: 'B', price: 500000 },
+      { id: 'm', label: 'Médio', short: 'M', price: 750000 },
+      { id: 'a', label: 'Alto', short: 'A', price: 1000000 },
+      { id: 'g', label: 'Gravíssimo', short: 'G', price: 1500000 },
+    ];
+
+    // Multas por categoria – edite aqui
     const MULTAS = {
       "Saídas de Emergência": [
-        { nome: "Rotas de fuga desobstruídas", valor: 500000 },
-        { nome: "Rotas de fuga iluminadas", valor: 500000 },
-        { nome: "Piso íntegro e acessível", valor: 500000 },
-        { nome: "Luminárias de emergência nas rotas", valor: 500000 },
-        { nome: "Sem saída de emergencia", valor: 500000 },
+        { nome: "Rotas de fuga desobstruídas" },
+        { nome: "Rotas de fuga iluminadas" },
+        { nome: "Piso íntegro e acessível" },
+        { nome: "Luminárias de emergência nas rotas" },
+        { nome: "Sem saída de emergencia" },
       ],
       "Escadas": [
-        { nome: "Escadas desobstruídas", valor: 500000 },
-        { nome: "Placas e iluminação nas escadas", valor: 500000 },
-        { nome: "Portas nas escadas", valor: 500000 },
+        { nome: "Escadas desobstruídas" },
+        { nome: "Placas e iluminação nas escadas" },
+        { nome: "Portas nas escadas" },
       ],
       "Extintores": [
-        { nome: "Extintores desobstruídos", valor: 500000 },
-        { nome: "Extintores sinalizados", valor: 500000 },
-        { nome: "Extintores em local apropriado", valor: 500000 },
-        { nome: "Quantidade de extintores (4 ou mais)", valor: 500000 },
+        { nome: "Extintores desobstruídos" },
+        { nome: "Extintores sinalizados" },
+        { nome: "Extintores em local apropriado" },
+        { nome: "Quantidade de extintores (4 ou mais)" },
       ],
       "Sistema de Hidrantes": [
-        { nome: "Hidrantes desobstruídos e sinalizados", valor: 500000 },
+        { nome: "Hidrantes desobstruídos e sinalizados" },
       ],
       "Sprinklers": [
-        { nome: "Existência de saída de fumaça / detector de fumaça", valor: 500000 },
+        { nome: "Existência de saída de fumaça / detector de fumaça" },
       ],
       "Iluminação e Sinalização": [
-        { nome: "Iluminação de emergência funcionando", valor: 500000 },
-        { nome: "Sinalização de emergência visível", valor: 500000 },
+        { nome: "Iluminação de emergência funcionando" },
+        { nome: "Sinalização de emergência visível" },
       ],
       "Acessibilidade": [
-        { nome: "Rampas para cadeirantes", valor: 500000 },
-        { nome: "Portas e corredores largos para cadeirantes", valor: 500000 },
+        { nome: "Rampas para cadeirantes" },
+        { nome: "Portas e corredores largos para cadeirantes" },
       ],
       "Outros Itens": [
-        { nome: "Material inflamável perto das saídas", valor: 500000 },
-        { nome: "Cabos ou fios expostos", valor: 500000 },
-        { nome: "Sem ventilação / entrada de ar", valor: 500000 },
-        { nome: "Materiais de risco em locais fechados", valor: 500000 },
+        { nome: "Material inflamável perto das saídas" },
+        { nome: "Cabos ou fios expostos" },
+        { nome: "Sem ventilação / entrada de ar" },
+        { nome: "Materiais de risco em locais fechados" },
       ]
     };
 
     const POS = {
-      x: 70,        // margem esquerda base do bloco de textos
-      yStart: 520,  // linha inicial (logo abaixo da linha vermelha do modelo)
-      line: 24,     // espaçamento entre linhas
-      sigX: 420,    // assinatura: eixo X (central da assinatura)
-      sigY: 730     // assinatura: eixo Y (perto do rodapé direito)
+      x: 70,
+      yStart: 520,
+      line: 24,
+      sigX: 420,
+      sigY: 730
     };
 
-    // Estado das quantidades
-    const qtd = {}; // chave = nome da multa -> quantidade
+    // Estado das quantidades: { "nome da multa": {b:0,m:0,a:0,g:0} }
+    const qtd = {};
 
     /*********** HELPERS ***********/
     const fmtBRL = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    const getPrice = (levelId) => LEVELS.find(l => l.id === levelId).price;
+
     function parseBRL(str) {
       if (!str) return 0;
       const limpo = str.replace(/\./g, "").replace(",", ".").replace(/[^0-9.]/g, "");
       const num = parseFloat(limpo);
       return isNaN(num) ? 0 : num;
     }
+
     function formatarMoeda(input) {
       let v = input.value.replace(/[^\d]/g, "");
       if (v === "") { input.value = "0,00"; return; }
       v = (parseInt(v, 10) / 100).toFixed(2).replace(".", ",");
       input.value = v.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function ensureItemInit(nome) {
+      if (!qtd[nome]) qtd[nome] = { b: 0, m: 0, a: 0, g: 0 };
     }
 
     /*********** RENDER ***********/
@@ -378,29 +411,53 @@
       Object.entries(MULTAS).forEach(([cat, itens]) => {
         const box = document.createElement("div");
         box.className = "categoria";
-        box.innerHTML = `<h3>${cat}</h3>`;
+
+        // título da categoria
+        const h3 = document.createElement("h3");
+        h3.textContent = cat;
+        box.appendChild(h3);
+
+        // cabeçalho das colunas
+        const head = document.createElement("div");
+        head.className = "grav-header";
+        head.innerHTML = `
+          <div class="nome-col">Item</div>
+          <div class="g-col-1">Baixo<br><small>${fmtBRL(getPrice('b'))}</small></div>
+          <div class="g-col-2">Médio<br><small>${fmtBRL(getPrice('m'))}</small></div>
+          <div class="g-col-3">Alto<br><small>${fmtBRL(getPrice('a'))}</small></div>
+          <div class="g-col-4">Gravíssimo<br><small>${fmtBRL(getPrice('g'))}</small></div>
+        `;
+        box.appendChild(head);
+
+        // linhas
         itens.forEach(item => {
-          if (!(item.nome in qtd)) qtd[item.nome] = 0;
+          ensureItemInit(item.nome);
+
           const linha = document.createElement("div");
           linha.className = "multa";
           linha.innerHTML = `
             <div class="nome">${item.nome}</div>
-            <div class="valor">${fmtBRL(item.valor)}</div>
-            <div class="qty">
-              <button type="button" aria-label="diminuir" onclick="alterarQtd('${item.nome}', -1)">−</button>
-              <input type="text" value="${qtd[item.nome]}" readonly />
-              <button type="button" aria-label="aumentar" onclick="alterarQtd('${item.nome}', 1)">+</button>
-            </div>
+            ${LEVELS.map((lvl, idx) => `
+              <div class="nivel g-${idx+1}">
+                <div class="qty">
+                  <button type="button" aria-label="diminuir ${lvl.label}" onclick="alterarQtd('${item.nome}','${lvl.id}', -1)">−</button>
+                  <input type="text" value="${qtd[item.nome][lvl.id]}" readonly />
+                  <button type="button" aria-label="aumentar ${lvl.label}" onclick="alterarQtd('${item.nome}','${lvl.id}', 1)">+</button>
+                </div>
+              </div>
+            `).join("")}
           `;
           box.appendChild(linha);
         });
+
         wrap.appendChild(box);
       });
     }
 
-    function alterarQtd(nome, delta) {
-      const novo = Math.max(0, (qtd[nome] || 0) + delta);
-      qtd[nome] = novo;
+    function alterarQtd(nome, levelId, delta) {
+      ensureItemInit(nome);
+      const cur = qtd[nome][levelId] || 0;
+      qtd[nome][levelId] = Math.max(0, cur + delta);
       montarCategorias();
       atualizarExtrato();
     }
@@ -411,17 +468,26 @@
       const valorInicial = parseBRL(document.getElementById("valorInicial").value);
       const razao = document.getElementById("razao").value.trim();
 
-      // montando lista de itens selecionados
       const linhas = [];
       let total = valorInicial;
 
       Object.entries(MULTAS).forEach(([cat, itens]) => {
         itens.forEach(item => {
-          const q = qtd[item.nome] || 0;
-          if (q > 0) {
-            const sub = q * item.valor;
+          ensureItemInit(item.nome);
+          const counts = qtd[item.nome];
+          const sub =
+            counts.b * getPrice('b') +
+            counts.m * getPrice('m') +
+            counts.a * getPrice('a') +
+            counts.g * getPrice('g');
+
+          if (sub > 0) {
             total += sub;
-            linhas.push({ nome: item.nome, q, unit: item.valor, sub });
+            linhas.push({
+              nome: item.nome,
+              counts,
+              sub
+            });
           }
         });
       });
@@ -437,11 +503,24 @@
         <br/>
       `;
 
+      const compactCounts = (c) => {
+        const parts = [];
+        if (c.b) parts.push(`B×${c.b}`);
+        if (c.m) parts.push(`M×${c.m}`);
+        if (c.a) parts.push(`A×${c.a}`);
+        if (c.g) parts.push(`G×${c.g}`);
+        return parts.join(", ");
+      };
+
       linhas.forEach(l => {
+        const cc = compactCounts(l.counts);
         html += `
           <div class="extrato-item">
-            <span><span class="x">${l.q}×</span> ${l.nome}</span>
-            <span>${fmtBRL(l.unit)} → <strong>${fmtBRL(l.sub)}</strong></span>
+            <span>
+              <span class="x">${cc || "—"}</span>
+              &nbsp; ${l.nome}
+            </span>
+            <span><strong>${fmtBRL(l.sub)}</strong></span>
           </div>
         `;
       });
@@ -451,7 +530,7 @@
     }
 
     function limparTudo() {
-      Object.keys(qtd).forEach(k => qtd[k] = 0);
+      Object.keys(qtd).forEach(k => { qtd[k] = { b: 0, m: 0, a: 0, g: 0 }; });
       document.getElementById("razao").value = "";
       document.getElementById("respLegal").value = "";
       document.getElementById("idPessoa").value = "";
@@ -467,7 +546,6 @@
     async function gerarAlvara() {
       const { jsPDF } = window.jspdf;
 
-      // ---- Campos (valores em negrito)
       const razao = (document.getElementById("razao").value || "").trim();
       const resp = (document.getElementById("respLegal").value || "").trim();
       const id = (document.getElementById("idPessoa").value || "").trim();
@@ -475,18 +553,15 @@
       const contato = (document.getElementById("contato").value || "").trim();
       const militar = (document.getElementById("militar").value || "").trim();
 
-      // ---- Datas
       const emissao = new Date();
       const renov = new Date(emissao); renov.setDate(emissao.getDate() + 30);
       const fmtDataHora = d => d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
       const fmtData = d => d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-      // ---- PDF A4
       const pdf = new jsPDF({ unit: "pt", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
 
-      // Fundo template (tamanho cheio)
       try {
         const imgData = await carregarTemplateComoDataURL(ALVARA_TEMPLATE_SRC);
         pdf.addImage(imgData, "PNG", 0, 0, pageW, pageH);
@@ -494,17 +569,13 @@
         console.warn("Falha ao carregar o template:", e);
       }
 
-      // ===== Escrever linhas (label normal + valor em negrito) =====
       pdf.setTextColor(0, 0, 0);
       const LBL_FONT = () => pdf.setFont("helvetica", "normal");
       const VAL_FONT = () => pdf.setFont("helvetica", "bold");
 
       const writeRow = (label, value, x, y) => {
-        // label
         LBL_FONT(); pdf.setFontSize(12);
         pdf.text(`${label}: `, x, y);
-
-        // valor em negrito (logo na sequência do label)
         const labelWidth = pdf.getTextWidth(`${label}: `);
         VAL_FONT(); pdf.setFontSize(12);
         pdf.text(value || "—", x + labelWidth, y);
@@ -519,20 +590,15 @@
       writeRow("Cargo", cargo, POS.x, y); y += POS.line;
       writeRow("Contato", contato, POS.x, y); y += POS.line + 10;
 
-      // ===== Assinatura (vermelha, “estilo caneta”) =====
-      pdf.setTextColor(178, 34, 34);       // vermelho (tom próximo ao do exemplo)
-      pdf.setFont("times", "italic");      // estilo cursivo básico; posso embutir fonte .ttf se quiser igual
+      pdf.setTextColor(178, 34, 34);
+      pdf.setFont("times", "italic");
       pdf.setFontSize(26);
       pdf.text(militar || "", POS.sigX, POS.sigY, { align: "center" });
-
-      // volta cor preta pro resto, se precisar
       pdf.setTextColor(0, 0, 0);
 
-      // salvar
       pdf.save(`alvara_${(razao || "empresa").replace(/\s+/g, "_")}.pdf`);
     }
 
-    // fetch -> blob -> dataURL (evita CORS/local issues)
     async function carregarTemplateComoDataURL(src) {
       const res = await fetch(src);
       if (!res.ok) throw new Error(`HTTP ${res.status} ao carregar ${src}`);
@@ -543,6 +609,7 @@
         fr.readAsDataURL(blob);
       });
     }
+
     /*********** INIT ***********/
     montarCategorias();
     atualizarExtrato();
